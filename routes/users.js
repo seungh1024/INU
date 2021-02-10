@@ -17,9 +17,11 @@ router.route('/')
   .post(async (req, res, next) => {
     try {
       const user = await User.create({
-        name: req.body.name,
+        id: req.body.name,
         pass: req.body.pass,
-        married: req.body.married,
+        name: req.body.tablename,
+        table_cnt:req.body.tablecount,
+
       });
     //post 요청의 body(html 파일 보면 있음)의 값을 파싱(가져올 때) 사용함
     //.body.name 이렇게 이름이 붙은 이유는 <body>에 있는 값을 
@@ -32,10 +34,10 @@ router.route('/')
     }
   });
 
-router.get('/:name', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const comments = await User.findOne({
-        where: { name: req.params.name },
+    const comments = await User.findAll({
+        where: { id: req.params.id },
       
     });
     //findAll메서드에 옵션이 추가됨

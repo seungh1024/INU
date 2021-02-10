@@ -8,15 +8,25 @@ module.exports = class User extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
+            id:{
+                type:Sequelize.STRING(20),
+                allowNull:false,
+                primaryKey:true,
+            },
+            pass:{
+                type:Sequelize.INTEGER.UNSIGNED,
+                allowNull:false,
+
+            },
             name:{
                 type:Sequelize.STRING(20),
                 allowNull:false,
                 unique:true,
             },
-            pass:{
+            table_cnt:{//테이블 수
                 type:Sequelize.INTEGER.UNSIGNED,
                 allowNull:false,
-            },
+            }
         
             
             //super.init의 첫번째 인수가 테이블 칼럼에 대한 설정

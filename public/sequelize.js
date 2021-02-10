@@ -99,6 +99,8 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     const name = e.target.username.value;
     const pass = e.target.age.value;
     const married = e.target.married.checked;
+    const tablename = e.target.tablename.value;
+    const tablecount = e.target.tablecount.value;
     if (!name) {
       return alert('이름을 입력하세요');
     }
@@ -106,13 +108,15 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
       return alert('나이를 입력하세요');
     }
     try {
-      await axios.post('/users', { name, pass, married });
+      await axios.post('/users', { name, pass,tablename,tablecount });
       getUser();
     } catch (err) {
       console.error(err);
     }
     e.target.username.value = '';
     e.target.age.value = '';
+    e.target.tablecount.value = '';
+    e.target.tablename.value = '';
     e.target.married.checked = false;
   });
   // 댓글 등록 시

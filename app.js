@@ -12,6 +12,7 @@ const usersRouter = require('./routes/users');
 
 const app=express();
 app.set('port',process.env.PORT || 3000);
+app.set('port2',process.env.PORT || 4000);
 app.set('view engine','html');
 nunjucks.configure('views',{
     express:app,
@@ -53,4 +54,8 @@ app.use((err,req,res,next)=>{
 
 app.listen(app.get('port'),()=>{
     console.log(app.get('port'),'번 포트에서 대기 중');
+});
+
+app.listen(app.get('port2'),()=>{
+    console.log(app.get('port2'),'번 포트에서 대기 중');
 });

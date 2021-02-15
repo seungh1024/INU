@@ -26,7 +26,7 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
         td.textContent = user.name;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = user.age;
+        td.textContent = user.pass;
         row.appendChild(td);
         td = document.createElement('td');
         td.textContent = user.married ? '기혼' : '미혼';
@@ -38,52 +38,36 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     }
   }
   // 댓글 로딩
-  async function getComment(id) {
+  async function getComment(userid) {
     try {
-      const res = await axios.get(`/users/${id}/comments`);
+      const res = await axios.get(`/users/${userid}/change`);
       const comments = res.data;
       const tbody = document.querySelector('#comment-list tbody');
       tbody.innerHTML = '';
-      comments.map(function (comment) {
+      comments.map(function (user) {
         // 로우 셀 추가
         const row = document.createElement('tr');
         let td = document.createElement('td');
-        td.textContent = comment.id;
+        td.textContent = user.id;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = comment.User.name;
+        td.textContent = user.name;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = comment.comment;
+        td.textContent = user.table_cnt;
         row.appendChild(td);
-        const edit = document.createElement('button');
-        edit.textContent = '수정';
-        edit.addEventListener('click', async () => { // 수정 클릭 시
-          const newComment = prompt('바꿀 내용을 입력하세요');
-          if (!newComment) {
-            return alert('내용을 반드시 입력하셔야 합니다');
-          }
-          try {
-            await axios.patch(`/comments/${comment.id}`, { comment: newComment });
-            getComment(id);
-          } catch (err) {
-            console.error(err);
-          }
-        });
         const remove = document.createElement('button');
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
-            await axios.delete(`/comments/${comment.id}`);
+            await axios.delete(`/users/${user.id}/delete`);
             getComment(id);
           } catch (err) {
             console.error(err);
           }
         });
         // 버튼 추가
-        td = document.createElement('td');
-        td.appendChild(edit);
-        row.appendChild(td);
+        
         td = document.createElement('td');
         td.appendChild(remove);
         row.appendChild(td);
@@ -98,7 +82,6 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     e.preventDefault();
     const name = e.target.username.value;
     const pass = e.target.age.value;
-    const married = e.target.married.checked;
     const tablename = e.target.tablename.value;
     const tablecount = e.target.tablecount.value;
     if (!name) {
@@ -117,7 +100,6 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     e.target.age.value = '';
     e.target.tablecount.value = '';
     e.target.tablename.value = '';
-    e.target.married.checked = false;
   });
   // 댓글 등록 시
   document.getElementById('comment-form').addEventListener('submit', async (e) => {

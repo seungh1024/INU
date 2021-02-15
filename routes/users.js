@@ -15,6 +15,7 @@ router.route('/')
     }
   })
   .post(async (req, res, next) => {
+    console.log(req.body);
     try {
       const user = await User.create({
         id: req.body.name,
@@ -34,10 +35,46 @@ router.route('/')
     }
   });
 
+router.get('/:id/change',async (req,res,next)=>{
+  try{
+    const users = await User.findAll({
+        where:{id:req.params.id},
+    });
+
+    console.log(users);
+    res.json(users);
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+})
+router.delete('/:id/delete',async(req,res,next)=>{
+  try{
+    const users = await User.destroy({
+      where:{id:req.params.id}
+    });
+    res.json(users);
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+router.post('/product/:id',async(req,res,next)=>{
+  try{
+    const product = req.params.id;
+    console.log(product);
+    res.json(product);
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+})
+
+
 router.get('/:id', async (req, res, next) => {
   try {
-    const comments = await User.findAll({
-        where: { id: req.params.id },
+    const comments = await User.findOne({
+        where:{ id: req.params.id },
       
     });
     //findAll메서드에 옵션이 추가됨
@@ -50,6 +87,7 @@ router.get('/:id', async (req, res, next) => {
     //만약 GET/users/1/comments라면 사용자 아이디가 1인 댓글을 불러옴
     console.log(comments);
     res.json(comments);
+    
   } catch (err) {
     console.error(err);
     next(err);

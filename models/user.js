@@ -26,7 +26,7 @@ module.exports = class User extends Sequelize.Model{
             table_cnt:{//테이블 수
                 type:Sequelize.INTEGER.UNSIGNED,
                 allowNull:false,
-            }
+            },
         
             
             //super.init의 첫번째 인수가 테이블 칼럼에 대한 설정

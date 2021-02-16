@@ -26,12 +26,13 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
         td.textContent = user.name;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = user.pass;
+        td.textContent = user.table_cnt;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = user.married ? '기혼' : '미혼';
+        td.textContent = user.pass ;
         row.appendChild(td);
         tbody.appendChild(row);
+        
       });
     } catch (err) {
       console.error(err);
@@ -61,6 +62,7 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
             await axios.delete(`/users/${user.id}/delete`);
+            getUser();
             getComment(id);
           } catch (err) {
             console.error(err);
@@ -101,6 +103,21 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     e.target.tablecount.value = '';
     e.target.tablename.value = '';
   });
+  //사용자 삭제 시
+  document.getElementById('user-delete').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = e.target.username.value;
+    if (!name) {
+      return alert('이름을 입력하세요');
+    }
+    try {
+      await axios.delete(`/users/${name}/delete`);
+      getUser();
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.username.value = '';
+  });
   // 댓글 등록 시
   document.getElementById('comment-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -115,6 +132,7 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     try {
       await axios.post('/comments', { id, comment });
       getComment(id);
+    
     } catch (err) {
       console.error(err);
     }

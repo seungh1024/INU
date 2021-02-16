@@ -17,19 +17,28 @@
           <div><input id="age" type="number" placeholder="비밀번호"></div>
           <div><input id="tablename" type="text" placeholder="가게이름"></div>
           <div><input id="tablecount" type="number" placeholder="테이블수"></div>
-          <div><input id="married" type="checkbox"><label for="married">결혼 여부</label></div>
           <button type="submit">등록</button>
         </fieldset>
       </form>
     </div>
     <br>
+    <div>
+        <form id="user-delete">
+          <fieldset>
+            <legend>사용자 삭제</legend>
+            <div><input id="username" type="text" placeholder="사업자번호"></div>
+            <button type="submit">삭제</button>
+          </fieldset>
+        </form>
+      </div>
+      <br>
     <table id="user-list">
       <thead>
       <tr>
         <th>사업자번호</th>
         <th>가게이름</th>
         <th>테이블수</th>
-        <th>결혼여부</th>
+        <th>비밀번호</th>
       </tr>
       </thead>
       <tbody>
@@ -38,7 +47,7 @@
           <td>{{user.id}}</td>
           <td>{{user.name}}</td>
           <td>{{user.table_cnt}}</td>
-          <td>{{ '기혼' if user.married else '미혼'}}</td>
+          <td>{{ user.pass}}</td>
         </tr>
         {% endfor %}
       </tbody>

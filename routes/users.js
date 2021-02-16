@@ -21,7 +21,6 @@ router.route('/')
         id: req.body.name,
         pass: req.body.pass,
         name: req.body.tablename,
-        table_cnt:req.body.tablecount,
 
       });
     //post 요청의 body(html 파일 보면 있음)의 값을 파싱(가져올 때) 사용함

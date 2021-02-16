@@ -16,7 +16,6 @@
           <div><input id="username" type="text" placeholder="사업자번호"></div>
           <div><input id="age" type="number" placeholder="비밀번호"></div>
           <div><input id="tablename" type="text" placeholder="가게이름"></div>
-          <div><input id="tablecount" type="number" placeholder="테이블수"></div>
           <button type="submit">등록</button>
         </fieldset>
       </form>
@@ -37,7 +36,6 @@
       <tr>
         <th>사업자번호</th>
         <th>가게이름</th>
-        <th>테이블수</th>
         <th>비밀번호</th>
       </tr>
       </thead>
@@ -46,7 +44,6 @@
         <tr>
           <td>{{user.id}}</td>
           <td>{{user.name}}</td>
-          <td>{{user.table_cnt}}</td>
           <td>{{ user.pass}}</td>
         </tr>
         {% endfor %}
@@ -60,7 +57,6 @@
       <tr>
         <th>사업자번호</th>
         <th>가게이름</th>
-        <th>테이블수</th>
         <th>삭제</th>
       </tr>
       </thead>

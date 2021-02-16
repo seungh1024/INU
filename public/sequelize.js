@@ -26,9 +26,6 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
         td.textContent = user.name;
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = user.table_cnt;
-        row.appendChild(td);
-        td = document.createElement('td');
         td.textContent = user.pass ;
         row.appendChild(td);
         tbody.appendChild(row);
@@ -53,9 +50,6 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
         row.appendChild(td);
         td = document.createElement('td');
         td.textContent = user.name;
-        row.appendChild(td);
-        td = document.createElement('td');
-        td.textContent = user.table_cnt;
         row.appendChild(td);
         const remove = document.createElement('button');
         remove.textContent = '삭제';
@@ -85,7 +79,6 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     const name = e.target.username.value;
     const pass = e.target.age.value;
     const tablename = e.target.tablename.value;
-    const tablecount = e.target.tablecount.value;
     if (!name) {
       return alert('이름을 입력하세요');
     }
@@ -93,14 +86,13 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
       return alert('나이를 입력하세요');
     }
     try {
-      await axios.post('/users', { name, pass,tablename,tablecount });
+      await axios.post('/users', { name, pass,tablename });
       getUser();
     } catch (err) {
       console.error(err);
     }
     e.target.username.value = '';
     e.target.age.value = '';
-    e.target.tablecount.value = '';
     e.target.tablename.value = '';
   });
   //사용자 삭제 시

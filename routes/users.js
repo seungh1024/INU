@@ -72,7 +72,7 @@ router.post('/product/:id',async(req,res,next)=>{
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const comments = await User.findOne({
+    const users = await User.findOne({
         where:{ id: req.params.id },
       
     });
@@ -84,8 +84,8 @@ router.get('/:id', async (req, res, next) => {
     //req.params는 get request의 URL에서 :(콜론)뒤에 오는 파라미터를 가져올 때(파싱) 사용
     //단 실제 URL에서 콜론이 입력되지는 않음.
     //만약 GET/users/1/comments라면 사용자 아이디가 1인 댓글을 불러옴
-    console.log(comments);
-    res.json(comments);
+    console.log(users);
+    res.json(users);
     
   } catch (err) {
     console.error(err);

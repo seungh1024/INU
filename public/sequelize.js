@@ -1,8 +1,8 @@
 // 사용자 이름 눌렀을 때 댓글 로딩
-document.querySelectorAll('#user-list tr').forEach((el) => {
+document.querySelectorAll('#store-list tr').forEach((el) => {
     el.addEventListener('click', function () {
       const id = el.querySelector('td').textContent;
-      getComment(id);
+      getMenu(id);
     });
   });
   // 사용자 로딩
@@ -15,9 +15,9 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
       tbody.innerHTML = '';
       users.map(function (user) {
         const row = document.createElement('tr');
-        row.addEventListener('click', () => {
-          getComment(user.id);
-        });
+        // row.addEventListener('click', () => {
+        //   getMenu(user.id);
+        // });
         // 로우 셀 추가
         let td = document.createElement('td');
         td.textContent = user.id;
@@ -35,29 +35,71 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
       console.error(err);
     }
   }
-  // 댓글 로딩
-  async function getComment(userid) {
+  //store 로딩
+  async function getStore() {
     try {
-      const res = await axios.get(`/users/${userid}/change`);
-      const comments = res.data;
-      const tbody = document.querySelector('#comment-list tbody');
+      const res = await axios.get('/stores');
+      const stores = res.data;
+      console.log(stores);
+      const tbody = document.querySelector('#store-list tbody');
       tbody.innerHTML = '';
-      comments.map(function (user) {
+      stores.map(function (store) {
+        const row = document.createElement('tr');
+        row.addEventListener('click', () => {
+          getMenu(store.store_code);
+        });
+        // 로우 셀 추가
+        let td = document.createElement('td');
+        td.textContent = store.store_code;//사업자 등록번호
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.status;//영업여부
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.table_cnt ;//테이블개수
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.latitude ;//위도
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.longitude ;//경도
+        row.appendChild(td);
+        tbody.appendChild(row);
+        
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  // Menu 로딩
+  async function getMenu(store_code) {
+    try {
+      const res = await axios.get(`/menus/${store_code}`);
+      const menus = res.data;
+      const tbody = document.querySelector('#menu-list tbody');
+      tbody.innerHTML = '';
+      menus.map(function (menu) {
         // 로우 셀 추가
         const row = document.createElement('tr');
         let td = document.createElement('td');
-        td.textContent = user.id;
+        td.textContent = menu.store_code;//사업자등록번호
+        row.appendChild(td);
+        td=document.createElement('td');
+        td.textContent = menu.menu_name;//메뉴명
         row.appendChild(td);
         td = document.createElement('td');
-        td.textContent = user.name;
+        td.textContent = menu.price;//메뉴 가격
         row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = menu.sold;//품절여부
+        row.appendChild(td);
+
         const remove = document.createElement('button');
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
-            await axios.delete(`/users/${user.id}/delete`);
-            getUser();
-            getComment(id);
+            await axios.delete(`/menus/${menu.store_code}/delete`);
+            getMenu(store_code);
           } catch (err) {
             console.error(err);
           }
@@ -85,6 +127,10 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     if (!pass) {
       return alert('나이를 입력하세요');
     }
+    if (!tablename) {
+      return alert('가게 이름을 입력하세요');
+    }
+
     try {
       await axios.post('/users', { name, pass,tablename });
       getUser();
@@ -105,29 +151,90 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
     try {
       await axios.delete(`/users/${name}/delete`);
       getUser();
+      getStore();
     } catch (err) {
       console.error(err);
     }
     e.target.username.value = '';
   });
-  // 댓글 등록 시
-  document.getElementById('comment-form').addEventListener('submit', async (e) => {
+  
+
+  //store등록 시
+  document.getElementById('store-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const id = e.target.userid.value;
-    const comment = e.target.comment.value;
-    if (!id) {
-      return alert('아이디를 입력하세요');
+    const store_code = e.target.store_code.value;
+    const status = e.target.status.value;
+    const table_cnt = e.target.table_cnt.value;
+    const latitude = e.target.latitude.value;
+    const longitude = e.target.longitude.value;
+    if (!store_code) {
+      return alert('사업자등록번호를 입력하세요');
     }
-    if (!comment) {
-      return alert('댓글을 입력하세요');
+    if (!table_cnt) {
+      return alert('테이블개수 입력하세요');
+    }
+    if (!latitude) {
+      return alert('위도 입력하세요');
+    }
+    if (!longitude) {
+      return alert('경도 입력하세요');
+    }
+    
+    try {
+      await axios.post('/stores', { store_code, status,table_cnt,latitude,longitude });
+      getUser();
+      getStore();
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.store_code.value = '';
+    e.target.status.checked = false;
+    e.target.table_cnt.value = '';
+    e.target.latitude.value ='';
+    e.target.longitude.value='';
+  });
+  //store 삭제 시
+  document.getElementById('store-delete').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = e.target.username.value;
+    if (!name) {
+      return alert('이름을 입력하세요');
     }
     try {
-      await axios.post('/comments', { id, comment });
-      getComment(id);
+      await axios.delete(`/stores/${name}/delete`);
+      getStore();
+      
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.username.value = '';
+  });
+
+  // menu 등록 시
+  document.getElementById('menu-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const store_code = e.target.store_code.value;
+    const menu_name = e.target.menu_name.value;
+    const price = e.target.price.value;
+    const sold = e.target.sold.value;
+    if (!store_code) {
+      return alert('사업자번호를 입력하세요');
+    }
+    if (!menu_name) {
+      return alert('메뉴를 입력하세요');
+    }
+    if (!price) {
+      return alert('가격을 입력하세요');
+    }
+    try {
+      await axios.post('/menus', { store_code, menu_name, price, sold });
+      
     
     } catch (err) {
       console.error(err);
     }
-    e.target.userid.value = '';
-    e.target.comment.value = '';
+    e.target.store_code.value = '';
+    e.target.menu_name.value = '';
+    e.target.price.value = '';
+    e.target.menu_name.checked = false;
   });

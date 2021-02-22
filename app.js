@@ -8,6 +8,8 @@ const {sequelize}=require('./models');
 //index.js 에 보면 db를 연동할 수 있게 모듈로 만들어 놓음
 const indexRouter=require('./routes');
 const usersRouter = require('./routes/users');
+const storesRouter = require('./routes/stores');
+const menuRouter = require('./routes/menus');
 //const commentsRouter = require('./routes/comments');
 
 const app=express();
@@ -37,6 +39,8 @@ app.use(express.urlencoded({extended:false}));
 
 app.use('/',indexRouter);
 app.use('/users',usersRouter);
+app.use('/stores',storesRouter);
+app.use('/menus',menuRouter);
 //app.use('/comments',commentsRouter);
 
 app.use((req,res,next)=>{

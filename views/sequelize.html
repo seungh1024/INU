@@ -30,7 +30,7 @@
           </fieldset>
         </form>
       </div>
-      <br>
+    <br> 
     <table id="user-list">
       <thead>
       <tr>
@@ -50,13 +50,75 @@
       </tbody>
     </table>
     
-    <br><br>
+    <br>
+    <div>
+        <form id="store-form">
+          <fieldset>
+            <legend>사업장 등록</legend>
+            <div><input id="store_code" type="text" placeholder="사업자등록번호"></div>
+            <div><input id="status0" name="status" type="radio" value=0>영업안함
+                <input id ="status1" name="status" type="radio" value=1>영업함</div>
+            <div><input id="table_cnt" type="number" placeholder="테이블 개수"></div>
+            <div><input id="latitude" type="text" placeholder="위도"></div>
+            <div><input id="longitude" type="text" placeholder="경도"></div>
+            <button type="submit">추가</button>
+          </fieldset>
+        </form>
+    <div>
+        <form id="store-delete">
+          <fieldset>
+            <legend>store 삭제</legend>
+            <div><input id="username" type="text" placeholder="사업자등록번호"></div>
+            <button type="submit">삭제</button>
+          </fieldset>
+        </form>
+    </div>    
+    </div>
+    <br>
+    <table id="store-list">
+        <thead>
+        <tr>
+          <th>사업자등록번호</th>
+          <th>영업여부</th>
+          <th>테이블 개수</th>
+          <th>위도</th>
+          <th>경도</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for store in stores %}
+          <tr>
+            <td>{{store.store_code}}</td>
+            <td>{{store.status}}</td>
+            <td>{{store.table_cnt}}</td>
+            <td>{{store.latitude}}</td>
+            <td>{{store.longitude}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     
-    <table id="comment-list">
+      <br>
+    <div>
+        <form id="menu-form">
+          <fieldset>
+            <legend>메뉴 등록</legend>
+            <div><input id="store_code" type="text" placeholder="사업자등록번호"></div>
+            <div><input id="menu_name" type="text" placeholder="메뉴명"></div>
+            <div><input id="price" type="number" placeholder="가격"></div>
+            <div><input id="sold" name="sold" type="radio" value=0>판매가능
+                <input id ="sold" name="sold" type="radio" value=1>매진</div>
+            <button type="submit">추가</button>
+          </fieldset>
+        </form>
+    <div>
+    <table id="menu-list">
       <thead>
       <tr>
-        <th>사업자번호</th>
-        <th>가게이름</th>
+        <th>사업자등록번호</th>
+        <th>메뉴명</th>
+        <th>가격</th>
+        <th>품절여부</th>
         <th>삭제</th>
       </tr>
       </thead>

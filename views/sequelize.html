@@ -59,8 +59,9 @@
             <div><input id="status0" name="status" type="radio" value=0>영업안함
                 <input id ="status1" name="status" type="radio" value=1>영업함</div>
             <div><input id="table_cnt" type="number" placeholder="테이블 개수"></div>
-            <div><input id="latitude" type="text" placeholder="위도"></div>
-            <div><input id="longitude" type="text" placeholder="경도"></div>
+            <div><input id="latitude" type="double" placeholder="위도"></div>
+            <div><input id="longitude" type="double" placeholder="경도"></div>
+            <div><input id="category" type="text" placeholder="카테고리"></div>
             <button type="submit">추가</button>
           </fieldset>
         </form>
@@ -83,6 +84,7 @@
           <th>테이블 개수</th>
           <th>위도</th>
           <th>경도</th>
+          <th>카테고리</th>
         </tr>
         </thead>
         <tbody>
@@ -93,6 +95,7 @@
             <td>{{store.table_cnt}}</td>
             <td>{{store.latitude}}</td>
             <td>{{store.longitude}}</td>
+            <td>{{store.category}}</td>
           </tr>
           {% endfor %}
         </tbody>

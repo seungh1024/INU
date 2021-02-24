@@ -37,7 +37,9 @@ router.route('/')// stores/로 get방식일 때
 router.get('/:store_code',async(req,res,next)=>{
     console.log(req.body);
     try{
-        const menus =await Menu.findAll();
+        const menus =await Menu.findAll({
+            where:{store_code:req.params.store_code}
+        });
         res.json(menus);
     }catch(err){
         console.error(err);

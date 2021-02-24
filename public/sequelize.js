@@ -64,6 +64,9 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         td = document.createElement('td');
         td.textContent = store.longitude ;//경도
         row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.category ;//카테고리
+        row.appendChild(td);
         tbody.appendChild(row);
         
       });
@@ -165,8 +168,11 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     const store_code = e.target.store_code.value;
     const status = e.target.status.value;
     const table_cnt = e.target.table_cnt.value;
-    const latitude = e.target.latitude.value;
-    const longitude = e.target.longitude.value;
+    const lat = e.target.latitude.value;
+    const long = e.target.longitude.value;
+    const category = e.target.category.value;
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(long);
     if (!store_code) {
       return alert('사업자등록번호를 입력하세요');
     }
@@ -179,9 +185,13 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     if (!longitude) {
       return alert('경도 입력하세요');
     }
+    if(!category){
+      return alert('카테고리 입력하세요');
+    }
+    
     
     try {
-      await axios.post('/stores', { store_code, status,table_cnt,latitude,longitude });
+      await axios.post('/stores', { store_code, status,table_cnt,latitude,longitude,category });
       getUser();
       getStore();
     } catch (err) {
@@ -192,6 +202,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     e.target.table_cnt.value = '';
     e.target.latitude.value ='';
     e.target.longitude.value='';
+    e.target.category.value='';
   });
   //store 삭제 시
   document.getElementById('store-delete').addEventListener('submit', async (e) => {

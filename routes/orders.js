@@ -60,12 +60,12 @@ router.delete('/:menu_name/:table_num/delete',async(req,res,next)=>{
       }
 });
 
-router.patch('/:menu_name/:table_num',async(req,res,next)=>{//주문 조리여부 업데이트
+router.patch('/:store_code/:table_num/:menu_name',async(req,res,next)=>{//주문 조리여부 업데이트
     try{
         const result = await Order.update({
             cook:req.body.cook,
         },{
-            where:{menu_name:req.params.menu_name,table_num:req.params.table_num },
+            where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },
         });
         res.json(result);
     }catch(err){

@@ -149,20 +149,11 @@
                     <th>메뉴개수</th>
                     <th>테이블번호</th>
                     <th>조리여부</th>
+                    <th>삭제</th>
                     
                 </tr>
             </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                  <td>{{order.store_code}}</td>
-                  <td>{{order.menu_name}}</td>
-                  <td>{{order.menu_cnt}}</td>
-                  <td>{{order.table_num}}</td>
-                  <td>{{order.cook}}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

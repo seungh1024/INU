@@ -3,6 +3,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     el.addEventListener('click', function () {
       const id = el.querySelector('td').textContent;
       getMenu(id);
+      getOrder(id);
     });
   });
   // 사용자 로딩
@@ -47,6 +48,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         const row = document.createElement('tr');
         row.addEventListener('click', () => {
           getMenu(store.store_code);
+          getOrder(store.store_code);
         });
         // 로우 셀 추가
         let td = document.createElement('td');
@@ -103,6 +105,54 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
           try {
             await axios.delete(`/menus/${menu.menu_name}/${menu.store_code}/delete`);
             getMenu(store_code);
+          } catch (err) {
+            console.error(err);
+          }
+        });
+        // 버튼 추가
+        
+        td = document.createElement('td');
+        td.appendChild(remove);
+        row.appendChild(td);
+        tbody.appendChild(row);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // Order 로딩
+  async function getOrder(store_code) {
+    try {
+      const res = await axios.get(`/orders/${store_code}`);
+      const orders = res.data;
+      const tbody = document.querySelector('#order-list tbody');
+      tbody.innerHTML = '';
+      orders.map(function (order) {
+        // 로우 셀 추가
+        const row = document.createElement('tr');
+        let td = document.createElement('td');
+        td.textContent = order.store_code;//사업자등록번호
+        row.appendChild(td);
+        td=document.createElement('td');
+        td.textContent = order.menu_name;//메뉴명
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = order.menu_cnt;//메뉴 개수
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = order.table_num;//테이블번호
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = order.cook;//조리여부
+        row.appendChild(td);
+
+        const remove = document.createElement('button');
+        remove.textContent = '삭제';
+        remove.addEventListener('click', async () => { // 삭제 클릭 시
+          try {
+            await axios.delete(`/orders/${order.menu_name}/${order.table_num}/delete`);
+            getOrder(store_code);
           } catch (err) {
             console.error(err);
           }

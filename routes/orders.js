@@ -48,12 +48,12 @@ router.get('/:store_code',async(req,res,next)=>{
     }
 });
 
-router.delete('/:menu_name/:store_code/delete',async(req,res,next)=>{
+router.delete('/:menu_name/:table_num/delete',async(req,res,next)=>{
     try{
-        const menu = await Menu.destroy({
-          where:{menu_name:req.params.menu_name ,store_code:req.params.store_code}
+        const orders = await Order.destroy({
+          where:{menu_name:req.params.menu_name ,table_num:req.params.table_num}
         });
-        res.json(menu);
+        res.json(orders);
       }catch(err){
         console.error(err);
         next(err);

@@ -59,5 +59,19 @@ router.delete('/:menu_name/:store_code/delete',async(req,res,next)=>{
       }
 });
 
+router.patch('/:store_code/:menu_name',async(req,res,next)=>{//주문 조리여부 업데이트
+    try{
+        const result = await Menu.update({
+            sold:req.body.sold,
+        },{
+            where:{store_code:req.params.store_code,menu_name:req.params.menu_name },
+        });
+        res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+});
+
 
 module.exports = router;

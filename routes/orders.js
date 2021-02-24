@@ -60,5 +60,19 @@ router.delete('/:menu_name/:table_num/delete',async(req,res,next)=>{
       }
 });
 
+router.patch('/:menu_name/:table_num',async(req,res,next)=>{//주문 조리여부 업데이트
+    try{
+        const result = await Order.update({
+            cook:req.body.cook,
+        },{
+            where:{menu_name:req.params.menu_name,table_num:req.params.table_num },
+        });
+        res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+});
+
 
 module.exports = router;

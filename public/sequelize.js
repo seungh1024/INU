@@ -1,3 +1,4 @@
+
 // 사용자 이름 눌렀을 때 댓글 로딩
 document.querySelectorAll('#store-list tr').forEach((el) => {
     el.addEventListener('click', function () {
@@ -97,6 +98,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         row.appendChild(td);
         td = document.createElement('td');
         td.textContent = menu.sold;//품절여부
+        const updatecode = td.textContent;//품절여부 담는 변수
         row.appendChild(td);
 
         const remove = document.createElement('button');
@@ -109,10 +111,33 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
             console.error(err);
           }
         });
+
+        //수정버튼 만들기
+        const edit = document.createElement('button');
+        edit.textContent = '수정';
+        edit.addEventListener('click', async () => { // 수정 클릭 시
+          var newComment= 0;
+          if(updatecode =='0'){//위의 품절여부 로 바꿔줌
+            newComment =1;
+          }else{
+            newComment =0;
+          }
+          
+          try {
+            await axios.patch(`/menus/${menu.store_code}/${menu.menu_name}`, { sold: newComment });
+            getMenu(store_code);
+          } catch (err) {
+            console.error(err);
+          }
+        });
+
         // 버튼 추가
         
         td = document.createElement('td');
         td.appendChild(remove);
+        row.appendChild(td);
+        td = document.createElement('td');//수정버튼
+        td.appendChild(edit);
         row.appendChild(td);
         tbody.appendChild(row);
       });
@@ -145,8 +170,10 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         row.appendChild(td);
         td = document.createElement('td');
         td.textContent = order.cook;//조리여부
+        const updatecode = td.textContent;
         row.appendChild(td);
 
+        //삭제버튼 만들기
         const remove = document.createElement('button');
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
@@ -157,10 +184,30 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
             console.error(err);
           }
         });
-        // 버튼 추가
-        
+        //수정버튼 만들기
+        const edit = document.createElement('button');
+        edit.textContent = '수정';
+        edit.addEventListener('click', async () => { // 수정 클릭 시
+          var newComment= 0;
+          if(updatecode =='0'){
+            newComment =1;
+          }else{
+            newComment =0;
+          }
+          
+          try {
+            await axios.patch(`/orders/${order.menu_name}/${order.table_num}`, { cook: newComment });
+            getOrder(store_code);
+          } catch (err) {
+            console.error(err);
+          }
+        });
+        //삭제,수정버튼 추가
         td = document.createElement('td');
         td.appendChild(remove);
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.appendChild(edit);
         row.appendChild(td);
         tbody.appendChild(row);
       });

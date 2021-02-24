@@ -101,7 +101,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
-            await axios.delete(`/menus/${menu.store_code}/delete`);
+            await axios.delete(`/menus/${menu.menu_name}/${menu.store_code}/delete`);
             getMenu(store_code);
           } catch (err) {
             console.error(err);
@@ -198,7 +198,8 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
       console.error(err);
     }
     e.target.store_code.value = '';
-    e.target.status.checked = false;
+    e.target.status0.checked = false;
+    e.target.status1.checked = false;
     e.target.table_cnt.value = '';
     e.target.latitude.value ='';
     e.target.longitude.value='';
@@ -247,5 +248,40 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     e.target.store_code.value = '';
     e.target.menu_name.value = '';
     e.target.price.value = '';
-    e.target.menu_name.checked = false;
+    e.target.sold0.checked = false;
+    e.target.sold1.checked = false;
+  });
+
+  //order 등록시
+  document.getElementById('order-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const store_code = e.target.store_code.value;
+    const menu_name = e.target.menu_name.value;
+    const menu_cnt = e.target.menu_cnt.value;
+    const table_num = e.target.table_num.value;
+    const cook = e.target.cook.value;
+    if (!store_code) {
+      return alert('사업자번호를 입력하세요');
+    }
+    if (!menu_name) {
+      return alert('메뉴를 입력하세요');
+    }
+    if (!menu_cnt) {
+      return alert('메뉴개수를 입력하세요');
+    }
+    if (!table_num) {
+      return alert('테이블번호를 입력하세요');
+    }
+    try {
+      await axios.post('/orders', { store_code, menu_name, menu_cnt, table_num, cook });
+      
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.store_code.value = '';
+    e.target.menu_name.value = '';
+    e.target.menu_cnt.value = '';
+    e.target.table_num.value = '';
+    e.target.cook0.checked = false;
+    e.target.cook1.checked = false;
   });

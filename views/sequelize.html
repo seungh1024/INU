@@ -109,8 +109,8 @@
             <div><input id="store_code" type="text" placeholder="사업자등록번호"></div>
             <div><input id="menu_name" type="text" placeholder="메뉴명"></div>
             <div><input id="price" type="number" placeholder="가격"></div>
-            <div><input id="sold" name="sold" type="radio" value=0>판매가능
-                <input id ="sold" name="sold" type="radio" value=1>매진</div>
+            <div><input id="sold0" name="sold" type="radio" value=0>판매가능
+                <input id ="sold1" name="sold" type="radio" value=1>매진</div>
             <button type="submit">추가</button>
           </fieldset>
         </form>
@@ -127,6 +127,44 @@
       </thead>
       <tbody></tbody>
     </table>
+    <br>
+    <div>
+        <form id="order-form">
+            <fieldset>
+            <legend>주문목록</legend>
+            <div><input id="store_code" type="text" placeholder="사업자등록번호"></div>
+            <div><input id="menu_name" type="text" placeholder="메뉴명"></div>
+            <div><input id="menu_cnt" type="number" placeholder="메뉴개수"></div>
+            <div><input id="table_num" type="number" placeholder="테이블번호"></div>
+            <div><input id="cook0" name="cook" type="radio" value=0>조리중
+                <input id ="cook1" name="cook" type="radio" value=1>조리완료</div>
+                <button type="submit">추가</button>
+            </fieldset>
+        </form>
+        <table id = "order-list">
+            <thead>
+                <tr>
+                    <th>사업자등록번호</th>
+                    <th>메뉴명</th>
+                    <th>메뉴개수</th>
+                    <th>테이블번호</th>
+                    <th>조리여부</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                  <td>{{order.store_code}}</td>
+                  <td>{{order.menu_name}}</td>
+                  <td>{{order.menu_cnt}}</td>
+                  <td>{{order.table_num}}</td>
+                  <td>{{order.cook}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+        </table>
+    </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/sequelize.js"></script>
   </body>

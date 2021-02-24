@@ -1,6 +1,6 @@
 const Sequelize=require('sequelize');
 
-module.exports = class Store extends Sequelize.Model{
+module.exports = class Order extends Sequelize.Model{
     //모듈로 만들고 exports 함
     //User 모델은 Sequelize.Model을 확장한 클래스로 선언
     static init(sequelize){
@@ -8,33 +8,27 @@ module.exports = class Store extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            store_code:{//사업자등록번호
-                type:Sequelize.STRING(10),
-                allowNull:false,
-                primaryKey:true,
-                
-            },
-            status:{//영업여부 0:영업안함 1:영업중
-                type:Sequelize.INTEGER,
+            // store_code:{//사업자등록번호
+            //     type:Sequelize.STRING(20),
+            //     allowNull:false,
+            // },
+            menu_name:{//메뉴명
+                type:Sequelize.STRING(20),
                 allowNull:false,
 
             },
-            table_cnt:{//테이블개수
-                type:Sequelize.INTEGER.UNSIGNED,
+            menu_cnt:{//메뉴개수
+                type:Sequelize.INTEGER,
                 allowNull:false,
             },
-            latitude:{//위도
-                type:Sequelize.DOUBLE,
+            table_num:{//테이블 번호
+                type:Sequelize.INTEGER,
                 allowNull:false,
             },
-            longitude:{//경도
-                type:Sequelize.DOUBLE,
+            cook:{//조리여부
+                type:Sequelize.INTEGER,
                 allowNull:false,
             },
-            category:{
-                type:Sequelize.STRING(20),
-                allowNull:true,
-            }
         
             
             //super.init의 첫번째 인수가 테이블 칼럼에 대한 설정
@@ -54,8 +48,8 @@ module.exports = class Store extends Sequelize.Model{
             sequelize,
             timestamps:false,
             underscored:false,
-            modelName:'Store',
-            tableName:'stores',
+            modelName:'Order',
+            tableName:'orders',
             paranoid:false,
             charset:'utf8',
             collate:'utf8_general_ci',
@@ -77,9 +71,7 @@ module.exports = class Store extends Sequelize.Model{
 
     }
     static associate(db){
-        db.Store.hasMany(db.Menu,{foreignKey:'store_code',sourceKey:'store_code'});
-        db.Store.hasMany(db.Order,{foreignKey:'store_code',sourceKey:'store_code'});
-        //db.User.hasMany(db.Comment,{foreignKey:'commenter',sourceKey:'id'});
+        db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

@@ -105,7 +105,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
-            await axios.delete(`/menus/${menu.menu_name}/${menu.store_code}/delete`);
+            await axios.delete(`/menus/${menu.store_code}/${menu.menu_name}/delete`);
             getMenu(store_code);
           } catch (err) {
             console.error(err);

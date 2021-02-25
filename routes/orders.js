@@ -16,7 +16,7 @@ router.route('/')// orders/로 get방식일 때
   .post(async (req, res, next) => {//post방식일 때
     console.log(req.body);
     const neworder = await Order.findOne({
-        where:{store_code:req.body.store_code,table_num:req.body.table_num}
+        where:{store_code:req.body.store_code,menu_name:req.body.menu_name,table_num:req.body.table_num}
     })
     if(!neworder){
         try {
@@ -38,20 +38,25 @@ router.route('/')// orders/로 get방식일 때
             next(err);
           }
     }else{
-        // try{
-        //     const num = neworder.menu_num + req.body.menu_cnt;
-        //     const result = await Order.update({
-        //         menu_cnt:num,
+        try{
+            const num1 = parseInt(neworder.menu_cnt);
+            const num2 = parseInt(req.body.menu_cnt);
+            const num = num1+num2;
+            console.log(neworder.menu_cnt);
+            console.log(parseInt(req.body.menu_cnt));
+            console.log(num);
+            const result = await Order.update({
+                menu_cnt:num,
                 
-        //     },{
-        //         where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },
-        //     });
-        //     res.json(result);
+            },{
+                where:{store_code:req.body.store_code ,table_num:req.body.table_num, menu_name:req.body.menu_name },
+            });
+            res.json(result);
 
-        // }catch(err){
-        //     console.error(err);
-        //     next(err);
-        // }
+        }catch(err){
+            console.error(err);
+            next(err);
+        }
     }
     
   });

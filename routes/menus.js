@@ -47,10 +47,10 @@ router.get('/:store_code',async(req,res,next)=>{
     }
 });
 
-router.delete('/:menu_name/:store_code/delete',async(req,res,next)=>{
+router.delete('/:store_code/:menu_name/delete',async(req,res,next)=>{
     try{
         const menu = await Menu.destroy({
-          where:{menu_name:req.params.menu_name ,store_code:req.params.store_code}
+          where:{ store_code:req.params.store_code,menu_name:req.params.menu_name }
         });
         res.json(menu);
       }catch(err){

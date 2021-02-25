@@ -38,20 +38,20 @@ router.route('/')// orders/로 get방식일 때
             next(err);
           }
     }else{
-        try{
-            const num = neworder.menu_num + req.body.menu_cnt;
-            const result = await Order.update({
-                menu_cnt:num,
+        // try{
+        //     const num = neworder.menu_num + req.body.menu_cnt;
+        //     const result = await Order.update({
+        //         menu_cnt:num,
                 
-            },{
-                where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },
-            });
-            res.json(result);
+        //     },{
+        //         where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },
+        //     });
+        //     res.json(result);
 
-        }catch(err){
-            console.error(err);
-            next(err);
-        }
+        // }catch(err){
+        //     console.error(err);
+        //     next(err);
+        // }
     }
     
   });

@@ -191,9 +191,9 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
             console.error(err);
           }
         });
-        //수정버튼 만들기
+        //조리여부 수정버튼 만들기
         const edit = document.createElement('button');
-        edit.textContent = '수정';
+        edit.textContent = '조리수정';
         edit.addEventListener('click', async () => { // 수정 클릭 시
           var newComment= 0;
           if(updatecode =='0'){
@@ -210,13 +210,38 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
             console.error(err);
           }
         });
+        //결제여부 수정버튼 만들기
+        const pay = document.createElement('button');
+        pay.textContent = '결제수정';
+        pay.addEventListener('click', async () => { // 수정 클릭 시
+          // var payComment= 0;
+          // if(paycode =='0'){
+          //   payComment =1;
+          // }else{
+          //   payComment =0;
+          // }
+          
+          try {
+            
+            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/pay`);
+            getOrder(store_code);
+          } catch (err) {
+            console.error(err);
+          }
+        });
         //삭제,수정버튼 추가
         td = document.createElement('td');
         td.appendChild(remove);
         row.appendChild(td);
+        //삭제버튼
         td = document.createElement('td');
         td.appendChild(edit);
         row.appendChild(td);
+        //조리수정버튼
+        td = document.createElement('td');
+        td.appendChild(pay);
+        row.appendChild(td);
+        //결제수정버튼
         tbody.appendChild(row);
       });
     } catch (err) {

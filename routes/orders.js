@@ -103,7 +103,7 @@ router.delete('/:store_code/:table_num/:menu_name/delete',async(req,res,next)=>{
 });
 
 router.patch('/:store_code/:table_num/:menu_name',async(req,res,next)=>{//주문 조리여부 버튼으로 동작 하는 업데이트
-    console.log(req.body.cook);
+    //console.log(req.body.cook);
     try{
         const result = await Order.update({
             cook:req.body.cook,
@@ -125,6 +125,37 @@ router.patch('/:store_code/:table_num/:menu_name/change',async(req,res,next)=>{/
     try{
         const result = await Order.update({
             menu_cnt:req.body.menu_cnt,
+            
+        },{
+            where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },
+        });
+        res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+});
+
+router.patch('/:store_code/:table_num/:menu_name/pay',async(req,res,next)=>{//주문 조리여부 업데이트
+    //결제여부변동을 위한 update
+    try{
+        var paycnt = await Order.findOne({
+            where:{store_code:req.params.store_code, table_num:req.params.table_num, menu_name:req.params.menu_name },
+        })
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+    var cnt = 0;
+    if(paycnt.pay == 0 ){
+        cnt = 1;
+    }else{
+        cnt = 0;
+    }
+    console.log(cnt);
+    try{
+        const result = await Order.update({
+            pay:cnt,
             
         },{
             where:{store_code:req.params.store_code ,table_num:req.params.table_num,menu_name:req.params.menu_name },

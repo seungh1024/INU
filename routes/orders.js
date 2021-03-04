@@ -30,7 +30,7 @@ router.route('/')// orders/로 get방식일 때
         var year = newdate.getFullYear();
         var month = newdate.getMonth()+1;
         var day = newdate.getDate();
-        var hour = newdate.getHours() - 9;
+        var hour = newdate.getHours() + 9;
         if(hour < 0){
             hour = hour +24;
         }

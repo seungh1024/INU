@@ -30,7 +30,13 @@ router.route('/')// orders/로 get방식일 때
         var year = newdate.getFullYear();
         var month = newdate.getMonth()+1;
         var day = newdate.getDate();
-        var hour = newdate.getHours();
+        var hour = newdate.getHours() - 9;
+        if(hour < 0){
+            hour = hour +24;
+        }
+        if(hour >24){
+            hour = hour - 24;
+        }
         var min = newdate.getMinutes();
         var sec = newdate.getSeconds();
         var now =year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;

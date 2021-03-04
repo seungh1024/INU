@@ -172,6 +172,13 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         td.textContent = order.cook;//조리여부
         const updatecode = td.textContent;
         row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = order.pay;//결제여부
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = order.date;//주문일시
+        row.appendChild(td);
+        
 
         //삭제버튼 만들기
         const remove = document.createElement('button');
@@ -358,6 +365,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     const menu_cnt = e.target.menu_cnt.value;
     const table_num = e.target.table_num.value;
     const cook = e.target.cook.value;
+    const pay = e.target.pay.value;
     if (!store_code) {
       return alert('사업자번호를 입력하세요');
     }
@@ -371,7 +379,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
       return alert('테이블번호를 입력하세요');
     }
     try {
-      await axios.post('/orders', { store_code, menu_name, menu_cnt, table_num, cook });
+      await axios.post('/orders', { store_code, menu_name, menu_cnt, table_num, cook, pay});
       
     } catch (err) {
       console.error(err);
@@ -382,4 +390,6 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     e.target.table_num.value = '';
     e.target.cook0.checked = false;
     e.target.cook1.checked = false;
+    e.target.pay0.checked = false;
+    e.target.pay1.checked = false;
   });

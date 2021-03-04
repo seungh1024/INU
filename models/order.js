@@ -29,6 +29,14 @@ module.exports = class Order extends Sequelize.Model{
                 type:Sequelize.INTEGER,
                 allowNull:false,
             },
+            pay:{//조리여부
+                type:Sequelize.INTEGER,
+                allowNull:false,
+            },
+            date:{//주문 일시
+                type:Sequelize.STRING(20),
+                allowNull:true,
+            },
         
             
             //super.init의 첫번째 인수가 테이블 칼럼에 대한 설정

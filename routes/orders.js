@@ -1,7 +1,6 @@
 const express = require('express');
 const Order = require('../models/order');
 const Sequelize = require('sequelize');
-const { and } = require('sequelize');
 
 const router = express.Router();
 
@@ -113,8 +112,26 @@ router.delete('/:store_code/:table_num/:menu_name/delete',async(req,res,next)=>{
       }
 });
 
-router.patch('/:store_code/:table_num/:menu_name/:date/cook',async(req,res,next)=>{//주문 조리여부 버튼으로 동작 하는 업데이트
+//주문 조리여부 버튼으로 동작 하는 업데이트
+router.patch('/:store_code/:table_num/:menu_name/:date/cook',async(req,res,next)=>{
+    //기존 cook값이 0이면 1, 1이면 0으로 바꿔줌
     //console.log(req.body.cook);
+    var cnt = 0;
+    try{
+        var order = await Order.findOne({
+            where:{store_code:req.params.store_code ,table_num:req.params.table_num,
+                menu_name:req.params.menu_name ,date:req.params.date}
+        })
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+
+    if(order.cook == 0){
+        cnt =1;
+    }else{
+        cnt = 0;
+    };
     try{
         const result = await Order.update({
             cook:req.body.cook,

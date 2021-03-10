@@ -190,16 +190,11 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         const edit = document.createElement('button');
         edit.textContent = '조리수정';
         edit.addEventListener('click', async () => { // 수정 클릭 시
-          var newComment= 0;
-          if(updatecode =='0'){
-            newComment =1;
-          }else{
-            newComment =0;
-          }
+          
           
           try {
             
-            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/${order.date}/cook`, { cook: newComment });
+            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/${order.date}/cook`);
             getOrder(store_code);
           } catch (err) {
             console.error(err);

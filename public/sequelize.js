@@ -351,6 +351,22 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     }
     e.target.username.value = '';
   });
+  //store 업데이트 시
+  document.getElementById('store-update').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = e.target.username.value;
+    if (!name) {
+      return alert('이름을 입력하세요');
+    }
+    try {
+      await axios.patch(`/stores/${name}/status`);
+      getStore();
+      
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.username.value = '';
+  });
 
   // menu 등록 시
   document.getElementById('menu-form').addEventListener('submit', async (e) => {

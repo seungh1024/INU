@@ -75,6 +75,7 @@ router.delete('/:id/delete',async(req,res,next)=>{
   });
 
 router.get('/:store_code/menus', async (req, res, next) => {
+    //해당 가게의 메뉴들을 전부 찾는 라우터
   try {
     const menus = await Menu.findAll({
       include: {
@@ -97,5 +98,31 @@ router.get('/:store_code/menus', async (req, res, next) => {
     next(err);
   }
 });
+
+router.patch('/:store_code/status',async(req,res,next)=>{
+    //가게코드와 해당 테이블 번호의 모든 status값을 0,1로 변환
+    var cnt = 0;
+    var change = await Store.findOne({
+        where:{store_code:req.params.store_code},
+    });
+    if(change.status == 0){
+        cnt =1;
+    }else{
+        cnt = 0;
+    }
+    try{
+        const result = await Store.update({
+            status:cnt,
+            
+        },{
+            where:{store_code:req.params.store_code  },
+        });
+        res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+
+})
 
   module.exports = router;

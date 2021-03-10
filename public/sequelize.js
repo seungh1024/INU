@@ -204,7 +204,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
           
           try {
             
-            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}`, { cook: newComment });
+            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/${order.date}/cook`, { cook: newComment });
             getOrder(store_code);
           } catch (err) {
             console.error(err);
@@ -223,7 +223,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
           
           try {
             
-            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/pay`);
+            await axios.patch(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/${order.date}/pay`);
             getOrder(store_code);
           } catch (err) {
             console.error(err);

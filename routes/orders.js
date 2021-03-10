@@ -134,7 +134,7 @@ router.patch('/:store_code/:table_num/:menu_name/:date/cook',async(req,res,next)
     };
     try{
         const result = await Order.update({
-            cook:req.body.cook,
+            cook:cnt,
             
         },{
             where:{store_code:req.params.store_code ,table_num:req.params.table_num,
@@ -165,9 +165,9 @@ router.patch('/:store_code/:table_num/:menu_name/:date/cook',async(req,res,next)
 //     }
 // });
 
-router.patch('/:store_code/:table_num/:menu_name/:date/pay',async(req,res,next)=>{//주문 조리여부 업데이트
-    //결제여부변동을 위한 update
-    //해당 결제여부 변동은 해당 가게의 해당 테이블의 해당 메뉴종류 하나만 결제여부가 나옴
+//결제여부변동을 위한 update
+//해당 결제여부 변동은 해당 가게의 해당 테이블의 해당 메뉴종류 하나만 결제여부가 나옴
+router.patch('/:store_code/:table_num/:menu_name/:date/pay',async(req,res,next)=>{
     try{
         var paycnt = await Order.findOne({
             where:{store_code:req.params.store_code, table_num:req.params.table_num, 

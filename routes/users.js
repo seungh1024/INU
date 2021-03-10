@@ -34,19 +34,19 @@ router.route('/')
     }
   });
 
-router.get('/:id/change',async (req,res,next)=>{
-  try{
-    const users = await User.findAll({
-        where:{id:req.params.id},
-    });
+// router.get('/:id/change',async (req,res,next)=>{
+//   try{
+//     const users = await User.findAll({
+//         where:{id:req.params.id},
+//     });
 
-    console.log(users);
-    res.json(users);
-  }catch(err){
-    console.error(err);
-    next(err);
-  }
-})
+//     console.log(users);
+//     res.json(users);
+//   }catch(err){
+//     console.error(err);
+//     next(err);
+//   }
+// })
 router.delete('/:id/delete',async(req,res,next)=>{
   try{
     const users = await User.destroy({

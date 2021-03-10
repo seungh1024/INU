@@ -37,10 +37,10 @@ router.route('/')// stores/로 get방식일 때
     }
   });
 
-router.get('/:id', async (req, res, next) => {//사업자 번호로 가게를 찾을 때
+router.get('/:store_code', async (req, res, next) => {//사업자 번호로 가게를 찾을 때
     try {
       const store = await Store.findOne({
-          where:{ store_code: req.params.id },
+          where:{ store_code: req.params.store_code },
         
       });
       //findAll메서드에 옵션이 추가됨
@@ -62,10 +62,10 @@ router.get('/:id', async (req, res, next) => {//사업자 번호로 가게를 �
 
 
 //삭제시
-router.delete('/:id/delete',async(req,res,next)=>{
+router.delete('/:store_code/delete',async(req,res,next)=>{
     try{
       const store = await Store.destroy({
-        where:{store_code:req.params.id}
+        where:{store_code:req.params.store_code}
       });
       res.json(store);
     }catch(err){

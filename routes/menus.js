@@ -59,10 +59,24 @@ router.delete('/:store_code/:menu_name/delete',async(req,res,next)=>{
       }
 });
 
-router.patch('/:store_code/:menu_name',async(req,res,next)=>{//주문 조리여부 업데이트
+router.patch('/:store_code/:menu_name',async(req,res,next)=>{//메뉴 판매여부 업데이트
+    var cnt = 0;
+    try{
+        var menu = await Menu.findOne({
+            where:{store_code:req.params.store_code, menu_name: req.params.menu_name,}
+        })
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+    if(menu.sold == 0){
+        cnt =1;
+    }else{
+        cnt = 0;
+    }
     try{
         const result = await Menu.update({
-            sold:req.body.sold,
+            sold:cnt,
         },{
             where:{store_code:req.params.store_code,menu_name:req.params.menu_name },
         });

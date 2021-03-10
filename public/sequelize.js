@@ -116,15 +116,10 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         const edit = document.createElement('button');
         edit.textContent = '수정';
         edit.addEventListener('click', async () => { // 수정 클릭 시
-          var newComment= 0;
-          if(updatecode =='0'){//위의 품절여부 로 바꿔줌
-            newComment =1;
-          }else{
-            newComment =0;
-          }
+          
           
           try {
-            await axios.patch(`/menus/${menu.store_code}/${menu.menu_name}`, { sold: newComment });
+            await axios.patch(`/menus/${menu.store_code}/${menu.menu_name}`);
             getMenu(store_code);
           } catch (err) {
             console.error(err);

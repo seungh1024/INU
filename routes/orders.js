@@ -229,7 +229,7 @@ router.patch('/:store_code/:table_num/payall',async(req,res,next)=>{
         },{
             where:{store_code:req.params.store_code ,table_num:req.params.table_num },
         });
-        console.log(result.pay);
+        res.json(result);
     }catch(err){
         console.error(err);
         next(err);

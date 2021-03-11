@@ -39,8 +39,11 @@ router.route('/')// orders/로 get방식일 때
     }
     var min = newdate.getMinutes();
     var sec = newdate.getSeconds();
-    var now =year+'-'+month+'-'+day+'+'+hour+':'+min+':'+sec;
+    var now =year+'-'+month+'-'+day+'@'+hour+':'+min+':'+sec;
     now = now.toString();
+    if(year.toString() > month.toString()){
+        console.log('sex');
+    }
     try {
         const orders = await Order.create({//사용자 추가를 하는 것
           store_code: req.body.store_code,

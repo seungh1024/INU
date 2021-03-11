@@ -180,7 +180,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         remove.textContent = '삭제';
         remove.addEventListener('click', async () => { // 삭제 클릭 시
           try {
-            await axios.delete(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/delete`);
+            await axios.delete(`/orders/${order.store_code}/${order.table_num}/${order.menu_name}/${order.date}/delete`);
             getOrder(store_code);
           } catch (err) {
             console.error(err);

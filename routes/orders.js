@@ -100,10 +100,11 @@ router.get('/:store_code',async(req,res,next)=>{
     }
 });
 
-router.delete('/:store_code/:table_num/:menu_name/delete',async(req,res,next)=>{
+router.delete('/:store_code/:table_num/:menu_name/:date/delete',async(req,res,next)=>{
     try{
         const orders = await Order.destroy({
-          where:{store_code:req.params.store_code, table_num:req.params.table_num,menu_name:req.params.menu_name}
+          where:{store_code:req.params.store_code, table_num:req.params.table_num,
+            menu_name:req.params.menu_name,date:req.params.date,}
         });
         res.json(orders);
       }catch(err){

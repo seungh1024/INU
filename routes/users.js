@@ -58,16 +58,16 @@ router.delete('/:id/delete',async(req,res,next)=>{
     next(err);
   }
 });
-router.post('/product/:id',async(req,res,next)=>{
-  try{
-    const product = req.params.id;
-    console.log(product);
-    res.json(product);
-  }catch(err){
-    console.error(err);
-    next(err);
-  }
-})
+// router.post('/product/:id',async(req,res,next)=>{
+//   try{
+//     const product = req.params.id;
+//     console.log(product);
+//     res.json(product);
+//   }catch(err){
+//     console.error(err);
+//     next(err);
+//   }
+// })
 
 
 router.get('/:id', async (req, res, next) => {

@@ -39,7 +39,7 @@ router.route('/')// orders/로 get방식일 때
     }
     var min = newdate.getMinutes();
     var sec = newdate.getSeconds();
-    var now =year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
+    var now =year+'-'+month+'-'+day+'+'+hour+':'+min+':'+sec;
     now = now.toString();
     try {
         const orders = await Order.create({//사용자 추가를 하는 것

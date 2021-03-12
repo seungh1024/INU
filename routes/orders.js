@@ -144,6 +144,9 @@ router.patch('/:store_code/:table_num/:menu_name/:date/cook',async(req,res,next)
             where:{store_code:req.params.store_code ,table_num:req.params.table_num,
                 menu_name:req.params.menu_name ,date:req.params.date},
         });
+        payone(req.params.store_code,req.params.table_num,
+            req.params.menu_name,req.params.date);
+
         res.json(result);
     }catch(err){
         console.error(err);
@@ -181,44 +184,31 @@ router.patch('/:store_code/:table_num/:menu_name/:date/pay',async(req,res,next)=
         console.error(err);
         next(err);
     };
-
-    if(paycnt.pay == 0 && paycnt.cook == 1){
-        //조리가 완료되고 결제까지 완료했으면 삭제시킴
-        //해당 라우터는 pay값이 변동 될 때 실행이 되는 것
-        //pay 값은 default로 0이므로 0일 때 이 요청이 들어오면 1로 만들어 달라는 것
-        //1이되는 즉시 지우면 되므로 0일때 요청이 들어왔으니 지우면 됨
-        try{
-            const result = await Order.destroy({
-                where:{store_code:req.params.store_code, table_num:req.params.table_num, 
-                    menu_name:req.params.menu_name, date:req.params.date,},
-            })
-            res.json(result);
-        }catch(err){
-            console.error(err);
-            next(err);
-        }
-    }else{//pay값이 1일 땐 그대로 계속 값을 바꿔주면 됨
-        var cnt = 0;
-        if(paycnt.pay == 0 ){
-            cnt = 1;
-        }else{
-            cnt = 0;
-        }
-        console.log(cnt);
-        try{
-            const result = await Order.update({
-                pay:cnt,
-                
-            },{
-                where:{store_code:req.params.store_code ,table_num:req.params.table_num,
-                    menu_name:req.params.menu_name ,date:req.params.date,},
-            });
-            res.json(result);
-        }catch(err){
-            console.error(err);
-            next(err);
-        }
+    //0이면 1로, 1이면 0으로 pay값을 바꿔줌
+    var cnt = 0;
+    if(paycnt.pay == 0 ){
+        cnt = 1;
+    }else{
+        cnt = 0;
     }
+    console.log(cnt);
+    try{
+        const result = await Order.update({
+            pay:cnt,
+            
+        },{
+            where:{store_code:req.params.store_code ,table_num:req.params.table_num,
+                menu_name:req.params.menu_name ,date:req.params.date,},
+        });
+        payone(req.params.store_code,req.params.table_num,
+            req.params.menu_name,req.params.date);
+            
+        res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+    
 
 });
 
@@ -233,6 +223,9 @@ router.patch('/:store_code/:table_num/payall',async(req,res,next)=>{
         },{
             where:{store_code:req.params.store_code ,table_num:req.params.table_num },
         });
+
+        deletepay(req.params.store_code, req.params.table_num);
+        //해당 가게의 해당 테이블에서 cook 이 1이고, pay 가 1인 모든 행을 지운다
         res.json(result);
     }catch(err){
         console.error(err);
@@ -240,6 +233,32 @@ router.patch('/:store_code/:table_num/payall',async(req,res,next)=>{
     }
 
 })
+
+//조리가 다 됐고, 결제까지 완료한 모든 것들을 지우기 위한 함수다.
+async function deletepay(storecode,tablenum){
+    try{
+        var payall = await Order.destroy({
+            where:{store_code:storecode,table_num:tablenum, cook:1,pay:1}
+        })
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
+
+//조리가 다 됐고, 결제까지 완료한 것 중 하나만 지우기 위한 것이다.
+//부분결제 등을 위해서 만들어 놓은 것
+async function payone(store_code,table_num,menu_name,date){
+    try{
+        var payone = await Order.destroy({
+            where:{store_code:store_code, table_num:table_num ,
+            menu_name:menu_name, date:date,cook:1,pay:1 }
+        })
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
 
 
 module.exports = router;

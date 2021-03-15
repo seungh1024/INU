@@ -7,7 +7,13 @@ const router = express.Router();
 router.route('/')// orders/로 get방식일 때
  .get(async (req, res, next) => {
     try {
-      const orders = await Order.findAll();
+      var orders = await Order.findAll();
+      //console.log(orders[0].menu_name);
+      //데이터베이스가 배열 형태로 저장된 것을 확인함
+      //console.log(orders.length);
+      //길이 추출 확인함
+      //if(orders[0].time < orders[1].time)console.log('0이 더 빨리 생성 됨');
+      //날짜끼리 비교 가능 확인
       res.json(orders);
     } catch (err) {
       console.error(err);
@@ -202,7 +208,7 @@ router.patch('/:store_code/:table_num/:menu_name/:date/pay',async(req,res,next)=
         });
         payone(req.params.store_code,req.params.table_num,
             req.params.menu_name,req.params.date);
-            
+
         res.json(result);
     }catch(err){
         console.error(err);

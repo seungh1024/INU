@@ -1,6 +1,7 @@
 const Sequelize=require('sequelize');
 
-module.exports = class Order extends Sequelize.Model{
+//Analysis 는 통계를 위한 스키마임
+module.exports = class Analysis extends Sequelize.Model{
     //모듈로 만들고 exports 함
     //User 모델은 Sequelize.Model을 확장한 클래스로 선언
     static init(sequelize){
@@ -12,26 +13,30 @@ module.exports = class Order extends Sequelize.Model{
             //     type:Sequelize.STRING(20),
             //     allowNull:false,
             // },
-            menu_name:{//메뉴명
-                type:Sequelize.STRING(20),
-                allowNull:false,
+            store_code:{//사업자 등록번호
+                type:Sequelize.STRING(10),
+                allowNull:true,
 
+            },
+            menu_name:{
+                type:Sequelize.STRING(20),
+                allowNull:true,
+            },
+            price:{//메뉴 가격
+                type:Sequelize.INTEGER,
+                allowNull:true,
             },
             menu_cnt:{//메뉴개수
                 type:Sequelize.INTEGER,
-                allowNull:false,
+                allowNull:true,
             },
-            table_num:{//테이블 번호
+            money:{//총 금액
                 type:Sequelize.INTEGER,
-                allowNull:false,
+                allowNull:true,
             },
-            cook:{//조리여부
+            inout:{//조리여부 -> 1이면 매장, 0이면 포장 및 기타주문
                 type:Sequelize.INTEGER,
-                allowNull:false,
-            },
-            pay:{//조리여부
-                type:Sequelize.INTEGER,
-                allowNull:false,
+                allowNull:true,
             },
             date:{//주문 일시
                 type:Sequelize.STRING(20),
@@ -40,7 +45,6 @@ module.exports = class Order extends Sequelize.Model{
             time:{//비교를 위한 DATE값으로 이루어진 주문 일시
                 type:Sequelize.DATE,
                 allowNull:true,
-                defaultValue:Sequelize.NOW,
             }
         
             
@@ -61,8 +65,8 @@ module.exports = class Order extends Sequelize.Model{
             sequelize,
             timestamps:false,
             underscored:false,
-            modelName:'Order',
-            tableName:'orders',
+            modelName:'Analysis',
+            tableName:'analysis',
             paranoid:false,
             charset:'utf8',
             collate:'utf8_general_ci',
@@ -84,7 +88,7 @@ module.exports = class Order extends Sequelize.Model{
 
     }
     static associate(db){
-        db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
+        //db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

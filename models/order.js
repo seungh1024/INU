@@ -8,11 +8,11 @@ module.exports = class Order extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            store_code:{//사업자등록번호
-                type:Sequelize.STRING(20),
-                allowNull:false,
-                primaryKey:true,
-            },
+            // store_code:{//사업자등록번호
+            //     type:Sequelize.STRING(20),
+            //     allowNull:false,
+            //     primaryKey:true,
+            // },
             menu_name:{//메뉴명
                 type:Sequelize.STRING(20),
                 allowNull:false,

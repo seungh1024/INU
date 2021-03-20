@@ -8,15 +8,16 @@ module.exports = class Order extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            // store_code:{//사업자등록번호
-            //     type:Sequelize.STRING(20),
-            //     allowNull:false,
-            // },
-            // menu_name:{//메뉴명
-            //     type:Sequelize.STRING(20),
-            //     allowNull:false,
+            store_code:{//사업자등록번호
+                type:Sequelize.STRING(20),
+                allowNull:false,
+                primaryKey:true,
+            },
+            menu_name:{//메뉴명
+                type:Sequelize.STRING(20),
+                allowNull:false,
 
-            // },
+            },
             menu_cnt:{//메뉴개수
                 type:Sequelize.INTEGER,
                 allowNull:false,
@@ -84,7 +85,7 @@ module.exports = class Order extends Sequelize.Model{
     }
     static associate(db){
         db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
-        db.Order.belongsTo(db.Menu,{foreignKey:'menu_name',targetKey:'menu_name'});
+        db.Order.belongsTo(db.Menu,{foreignKey:'store_code',targetKey:'store_code'});
         //db.Order.hasMany(db.Analysis,{foreignKey:'menu_name',sourceKey:'menu_name'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함

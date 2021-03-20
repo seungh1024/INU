@@ -8,11 +8,11 @@ module.exports = class Menu extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            store_code:{
-                type:Sequelize.STRING(10),
-                allowNull:false,
-                primaryKey:true,
-            },
+            // store_code:{
+            //     type:Sequelize.STRING(10),
+            //     allowNull:false,
+            //     primaryKey:true,
+            // },
             menu_name:{//메뉴명
                 type:Sequelize.STRING(10),
                 allowNull:false,

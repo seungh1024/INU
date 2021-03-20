@@ -1,5 +1,7 @@
 const express = require('express');
 const Order = require('../models/order');
+const Menu = require('../models/menu');
+const Analysis = require('../models/analysis');
 const Sequelize = require('sequelize');
 
 const router = express.Router();
@@ -7,7 +9,18 @@ const router = express.Router();
 router.route('/')// orders/로 get방식일 때
  .get(async (req, res, next) => {
     try {
-      var orders = await Order.findAll();
+      var orders = await Order.findAll({
+        //   include:{
+        //       model: Menu,
+        //   },
+        //   where:{store_code:1},
+      });
+      //console.log(orders.store_code);
+      //하나만 찾을 땐 orders 이용
+      //console.log(orders.length);
+      //배열 형태일 땐 orders[0]이런식으로 이용하고 길이는 orders.lengtrh
+    //   console.log(orders[0].Menu.price);
+    //조인한 것으로 부터 데이터 추출하는 것을 확인함
       //console.log(orders[0].menu_name);
       //데이터베이스가 배열 형태로 저장된 것을 확인함
       //console.log(orders.length);
@@ -32,7 +45,9 @@ router.route('/')// orders/로 get방식일 때
     // nowdate = nowdate.toLocaleString();
     // //toLocalString()을 하면 2021.3.4. 오후 몇시 이렇게 나옴
     // console.log(nowdate);
+    var realTime = new Date(new Date().setHours(new Date().getHours()+9));
     var newdate = new Date();
+    console.log(newdate);
     var year = newdate.getFullYear();
     var month = newdate.getMonth()+1;
     var day = newdate.getDate();
@@ -46,10 +61,11 @@ router.route('/')// orders/로 get방식일 때
     var min = newdate.getMinutes();
     var sec = newdate.getSeconds();
     var now =year+'-'+month+'-'+day+'@'+hour+':'+min+':'+sec;
+    console.log(hour);
     now = now.toString();
-    if(year.toString() > month.toString()){
-        console.log('sex');
-    }
+    // if(year.toString() > month.toString()){
+    //     console.log('#################');
+    // }
     try {
         const orders = await Order.create({//사용자 추가를 하는 것
           store_code: req.body.store_code,
@@ -59,7 +75,7 @@ router.route('/')// orders/로 get방식일 때
           cook:req.body.cook,
           pay:req.body.pay,
           date:now,
-  
+          time:realTime,  
         });
         
       //post 요청의 body(html 파일 보면 있음)의 값을 파싱(가져올 때) 사용함
@@ -206,6 +222,7 @@ router.patch('/:store_code/:table_num/:menu_name/:date/pay',async(req,res,next)=
             where:{store_code:req.params.store_code ,table_num:req.params.table_num,
                 menu_name:req.params.menu_name ,date:req.params.date,},
         });
+        //updateAnalysis(req.params.store_code, req.params.table_num);
         payone(req.params.store_code,req.params.table_num,
             req.params.menu_name,req.params.date);
 
@@ -229,7 +246,7 @@ router.patch('/:store_code/:table_num/payall',async(req,res,next)=>{
         },{
             where:{store_code:req.params.store_code ,table_num:req.params.table_num },
         });
-
+        //updateAnalysis(req.params.store_code, req.params.table_num);
         deletepay(req.params.store_code, req.params.table_num);
         //해당 가게의 해당 테이블에서 cook 이 1이고, pay 가 1인 모든 행을 지운다
         res.json(result);
@@ -240,11 +257,103 @@ router.patch('/:store_code/:table_num/payall',async(req,res,next)=>{
 
 })
 
+//부분결제, 하나씩 결제 시 사용하는 함수로 analysis로 옮겨줌
+async function updateOne(store_code,table_num,menu_name,date){
+    console.log(store_code);
+    console.log(table_num);
+    console.log(menu_name);
+    console.log(date);
+    try{
+        var orders = await Order.findOne({
+            include:{
+                model: Menu,
+                where:{store_code:store_code}
+            },
+
+            where:{store_code:store_code, table_num:table_num, 
+                menu_name:menu_name, date:date, cook:1, pay:1}
+
+        })
+        console.log(orders);
+    }catch(err){
+        console.error(err);
+        return err;
+    }
+    // console.log('################');
+    // console.log(orders.table_num);
+    if(orders){
+        if(orders.table_num > 0){
+            orders.table_num = 1;
+        }
+        try{
+            const analysis = await Analysis.create({
+                store_code:store_code,
+                menu_name: orders.menu_name,
+                price: orders.Menu.price,
+                menu_cnt:orders.menu_cnt,
+                inout:orders.table_num,
+                date:orders.date,
+                time:orders.time,
+    
+            })
+        }catch(err){
+            console.error(err);
+            return err;
+        }
+    }
+    
+}
+
+
+
+//결제 시 결제 한 것을 analysis로 옮겨주는 함수, payall시에 사용
+async function updateAnalysis(store_code,table_num){
+    var cnt =0;
+    try{
+        var orders = await Order.findAll({
+            include:{
+                model: Menu,
+                where:{store_code:store_code}
+            },
+
+            where:{store_code:store_code, table_num:table_num, cook:1, pay:1}
+
+        })
+        //console.log(orders[0]);
+    }catch(err){
+        console.error(err);
+        return err;
+    }
+    
+    while(cnt < orders.length){
+        if(orders[cnt].table_num > 0){
+            orders[cnt].table_num = 1;
+        }
+        try{
+            const analysis = await Analysis.create({
+                store_code:store_code,
+                menu_name: orders[cnt].menu_name,
+                price: orders[cnt].Menu.price,
+                menu_cnt:orders[cnt].menu_cnt,
+                inout:orders[cnt].table_num,
+                date:orders[cnt].date,
+                time:orders[cnt].time,
+
+            })
+        }catch(err){
+            console.error(err);
+            return err;
+        }
+        cnt = cnt +1;
+    }
+}
+
 //조리가 다 됐고, 결제까지 완료한 모든 것들을 지우기 위한 함수다.
-async function deletepay(storecode,tablenum){
+async function deletepay(store_code,table_num){
+    updateAnalysis(store_code,table_num);
     try{
         var payall = await Order.destroy({
-            where:{store_code:storecode,table_num:tablenum, cook:1,pay:1}
+            where:{store_code:store_code,table_num:table_num, cook:1,pay:1}
         })
     }catch(err){
         console.error(err);
@@ -255,7 +364,9 @@ async function deletepay(storecode,tablenum){
 //조리가 다 됐고, 결제까지 완료한 것 중 하나만 지우기 위한 것이다.
 //부분결제 등을 위해서 만들어 놓은 것
 async function payone(store_code,table_num,menu_name,date){
+    
     try{
+        updateOne(store_code,table_num,menu_name,date);
         var payone = await Order.destroy({
             where:{store_code:store_code, table_num:table_num ,
             menu_name:menu_name, date:date,cook:1,pay:1 }

@@ -16,6 +16,7 @@ module.exports = class Menu extends Sequelize.Model{
             menu_name:{//메뉴명
                 type:Sequelize.STRING(10),
                 allowNull:false,
+                primaryKey:true,
                 
             },
             price:{//가격
@@ -70,6 +71,7 @@ module.exports = class Menu extends Sequelize.Model{
     }
     static associate(db){
         db.Menu.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
+        db.Menu.hasMany(db.Order,{foreignKey:'menu_name',targetKey:'menu_name'})
         //db.Comment.belongsTo(db.User,{foreignKey:'commenter',targetKey:'id'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함

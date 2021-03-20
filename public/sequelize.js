@@ -40,7 +40,7 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
   //store 로딩
   async function getStore() {
     try {
-      const res = await axios.get('/stores');
+      const res = await axios.get(`/stores/stores/getall`);
       const stores = res.data;
       console.log(stores);
       const tbody = document.querySelector('#store-list tbody');
@@ -69,6 +69,9 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
         row.appendChild(td);
         td = document.createElement('td');
         td.textContent = store.category ;//카테고리
+        row.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = store.User.name ;//가게명
         row.appendChild(td);
         tbody.appendChild(row);
         
@@ -400,9 +403,9 @@ document.querySelectorAll('#store-list tr').forEach((el) => {
     if (!store_code) {
       return alert('사업자번호를 입력하세요');
     }
-    if (!menu_name) {
-      return alert('메뉴를 입력하세요');
-    }
+    // if (!menu_name) {
+    //   return alert('메뉴를 입력하세요');
+    // }
     if (!menu_cnt) {
       return alert('메뉴개수를 입력하세요');
     }

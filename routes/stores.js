@@ -1,4 +1,5 @@
 const express = require('express');
+const User = require('../models/user');
 const Store = require('../models/store');
 const  Menu  = require('../models/menu');
 
@@ -7,7 +8,12 @@ const router = express.Router();
 router.route('/')// stores/로 get방식일 때
  .get(async (req, res, next) => {
     try {
-      const stores = await Store.findAll();
+      const stores = await Store.findAll({
+        // include:{
+        //   model:User
+        // },
+        // //where:{store_code:1},
+      });
       res.json(stores);
     } catch (err) {
       console.error(err);
@@ -59,7 +65,46 @@ router.get('/:store_code', async (req, res, next) => {//사업자 번호로 가�
       next(err);
     }
 });
+//가게명 까지 같이 알려주는 get방식 라우터 특정가게 값만 불러옴
+router.get('/:store_code/store_name',async(req,res,next)=>{
+  try{
+    const store = await Store.findAll({
+      include:{
+        model:User,
+        attributes:[
+          ['name','name'],
+          //attributes로 가게명만 추출해줌
+          //['속성명','별칭']
+        ]
+      },
+      where:{store_code:req.params.store_code},
+    })
+    res.json(store);
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
 
+//가게명 까지 같이 알려주는 get방식 라우터로 모든 가게를 다 가져옴
+router.get('/stores/getall',async(req,res,next)=>{
+  try {
+    const stores = await Store.findAll({
+      include:{
+        model:User,
+        attributes:[
+          ['name','name'],
+          //attributes로 가게명만 추출해줌
+          //['속성명','별칭']
+        ]
+      },
+    });
+    res.json(stores);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+})
 
 //삭제시
 router.delete('/:store_code/delete',async(req,res,next)=>{

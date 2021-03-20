@@ -79,6 +79,7 @@ module.exports = class Store extends Sequelize.Model{
     static associate(db){
         db.Store.hasMany(db.Menu,{foreignKey:'store_code',sourceKey:'store_code'});
         db.Store.hasMany(db.Order,{foreignKey:'store_code',sourceKey:'store_code'});
+        db.Store.belongsTo(db.User,{foreignKey:'store_code',targetKey:'id'});
         //db.User.hasMany(db.Comment,{foreignKey:'commenter',sourceKey:'id'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함

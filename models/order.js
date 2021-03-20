@@ -12,11 +12,11 @@ module.exports = class Order extends Sequelize.Model{
             //     type:Sequelize.STRING(20),
             //     allowNull:false,
             // },
-            menu_name:{//메뉴명
-                type:Sequelize.STRING(20),
-                allowNull:false,
+            // menu_name:{//메뉴명
+            //     type:Sequelize.STRING(20),
+            //     allowNull:false,
 
-            },
+            // },
             menu_cnt:{//메뉴개수
                 type:Sequelize.INTEGER,
                 allowNull:false,
@@ -40,7 +40,6 @@ module.exports = class Order extends Sequelize.Model{
             time:{//비교를 위한 DATE값으로 이루어진 주문 일시
                 type:Sequelize.DATE,
                 allowNull:true,
-                defaultValue:Sequelize.NOW,
             }
         
             
@@ -85,6 +84,8 @@ module.exports = class Order extends Sequelize.Model{
     }
     static associate(db){
         db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
+        db.Order.belongsTo(db.Menu,{foreignKey:'menu_name',targetKey:'menu_name'});
+        //db.Order.hasMany(db.Analysis,{foreignKey:'menu_name',sourceKey:'menu_name'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

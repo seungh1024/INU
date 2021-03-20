@@ -9,17 +9,13 @@ module.exports = class Analysis extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            // store_code:{//사업자등록번호
-            //     type:Sequelize.STRING(20),
-            //     allowNull:false,
-            // },
             store_code:{//사업자 등록번호
                 type:Sequelize.STRING(10),
                 allowNull:true,
 
             },
             menu_name:{
-                type:Sequelize.STRING(20),
+                type:Sequelize.STRING(10),
                 allowNull:true,
             },
             price:{//메뉴 가격
@@ -88,7 +84,7 @@ module.exports = class Analysis extends Sequelize.Model{
 
     }
     static associate(db){
-        //db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
+        //db.Analysis.belongsTo(db.Order,{foreignKey:'menu_name',targetKey:'menu_name'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

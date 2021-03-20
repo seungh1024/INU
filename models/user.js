@@ -21,7 +21,6 @@ module.exports = class User extends Sequelize.Model{
             name:{
                 type:Sequelize.STRING(20),
                 allowNull:false,
-                unique:true,
             },
         
             
@@ -65,6 +64,7 @@ module.exports = class User extends Sequelize.Model{
 
     }
     static associate(db){
+        db.User.hasMany(db.Store,{foreignKey:'store_code',sourceKey:'id'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

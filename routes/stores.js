@@ -72,7 +72,7 @@ router.get('/:store_code/store_name',async(req,res,next)=>{
       include:{
         model:User,
         attributes:[
-          ['name','name'],
+          ['name','market_name'],
           //attributes로 가게명만 추출해줌
           //['속성명','별칭']
         ]
@@ -93,7 +93,7 @@ router.get('/stores/getall',async(req,res,next)=>{
       include:{
         model:User,
         attributes:[
-          ['name','name'],
+          ['name','market_name'],
           //attributes로 가게명만 추출해줌
           //['속성명','별칭']
         ]

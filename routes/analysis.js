@@ -36,6 +36,7 @@ router.route('/')// orders/로 get방식일 때
  .post(async(req,res,next)=>{
      console.log(req.body.start);
      console.log(req.body.end);
+     console.log(req.body.store_code);
      const time = "T18:51:44.000Z"
      console.log(req.body.start+time);
      var start = req.body.start;
@@ -51,10 +52,11 @@ router.route('/')// orders/로 get방식일 때
         //         }
         //   }
           where:{
+            store_code:req.body.store_code,
             time:{
                 [Op.between]:[`${start}`,`${end}`],    
                 // [Op.between]:[start,end],
-            }
+            },
       }
             //where:Sequelize.literal(`(time between '${end}' AND '${start}')`),
 

@@ -9,19 +9,41 @@ router.route('/')// orders/로 get방식일 때
  .get(async (req, res, next) => {
     try{
         //const sql = 'select *from analysis where (substr(time,9,2)>16)'
-        var result = await Analysis.findAll({
+        var first = await Analysis.findAll({
             // attributes:[
             //     [Sequelize.literal('(substr(time+interval 20 day + interval 9 hour,9,5))'),'analysis']
             // ],
             // where:Sequelize.where(Sequelize.fn('substr',Sequelize.col('time'),9,2),16),
-            
-            
+            where:{store_code:'2'}
         })
-        res.json(result);
+        //res.json(result);
     }catch(err){
         console.error(err);
         next(err);
     }
+    try{
+        var  second = await Analysis.findAll({
+            where:{store_code:'1'}
+        })
+        //res.json(result);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+    // first = first.values().next();
+    // second = second.values().next();
+    
+    //total = total.valueOf();
+    first = JSON.stringify(first);
+    second = JSON.stringify(second);
+    //json형태로 string 형식으로 바꿔주는 것 같음
+    var total = first+second;
+    //그래서 합쳐짐
+    console.log(total);
+    console.log('##########');
+    res.send(total);
+    //합친걸 json으로 응답가능
+
     // try {
     //   var analysis = await Analysis.findAll({
     //     //Sequelize.query('SELECT * FROM analysis');

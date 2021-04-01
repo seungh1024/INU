@@ -59,14 +59,14 @@ router.route('/')// orders/로 get방식일 때
         //             [Op.between]:[req.body.start,req.body.end],
         //         }
         //   }
-          where:
-            //store_code:req.body.store_code,
-            // time:{
-            //     [Op.between]:[`${start}`,`${end}`],    
-            // },
-            
-                //between:[`${start}`,`${end}`],
-            Sequelize.where(Sequelize.literal(`store_code ='${req.body.store_code}' and time between '${start}' and '${end}'`)),
+          where:{
+            store_code:req.body.store_code,
+            time:{
+                [Op.between]:[`${start}`,`${end}`],    
+            },
+        }
+        //         //between:[`${start}`,`${end}`],
+        //     //Sequelize.where(Sequelize.literal(`store_code ='${req.body.store_code}' and time between '${start}' and '${end}'`)),
         });
         res.json(analysis);
 

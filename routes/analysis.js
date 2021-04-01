@@ -30,8 +30,6 @@ router.route('/')// orders/로 get방식일 때
         console.error(err);
         next(err);
     }
-    // first = first.values().next();
-    // second = second.values().next();
     
     //total = total.valueOf();
     first = JSON.stringify(first);
@@ -44,16 +42,7 @@ router.route('/')// orders/로 get방식일 때
     res.send(total);
     //합친걸 json으로 응답가능
 
-    // try {
-    //   var analysis = await Analysis.findAll({
-    //     //Sequelize.query('SELECT * FROM analysis');
-    //   });
-     
-    //   res.json(orders);
-    // } catch (err) {
-    //   console.error(err);
-    //   next(err);
-    // }
+    
   })
  .post(async(req,res,next)=>{
      console.log(req.body.start);
@@ -63,9 +52,6 @@ router.route('/')// orders/로 get방식일 때
      console.log(req.body.start+time);
      var start = req.body.start;
      var end = req.body.end;
-     if("2021-03-25T18:51:44.000Z" ==(start+time).toString){
-         console.log('hello');
-     }
      try{
         const analysis = await Analysis.findAll({
         //     where:{
@@ -73,17 +59,14 @@ router.route('/')// orders/로 get방식일 때
         //             [Op.between]:[req.body.start,req.body.end],
         //         }
         //   }
-          where:{
-            store_code:req.body.store_code,
-            time:{
-                [Op.between]:[`${start}`,`${end}`],    
-                // [Op.between]:[start,end],
-            },
-      }
-            //where:Sequelize.literal(`(time between '${end}' AND '${start}')`),
-
-    //"time": "2021-03-25T18:51:44.000Z"
-        
+          where:
+            //store_code:req.body.store_code,
+            // time:{
+            //     [Op.between]:[`${start}`,`${end}`],    
+            // },
+            
+                //between:[`${start}`,`${end}`],
+            Sequelize.where(Sequelize.literal(`store_code ='${req.body.store_code}' and time between '${start}' and '${end}'`)),
         });
         res.json(analysis);
 

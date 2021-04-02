@@ -133,7 +133,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -205,7 +205,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -282,7 +282,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -356,7 +356,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -433,7 +433,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -508,7 +508,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
+                        endTime = end+'-12-31T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{

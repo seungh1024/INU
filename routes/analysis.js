@@ -102,7 +102,7 @@ router.route('/')// orders/로 get방식일 때
      //포장,매장 전체 
      if(gubun3 === 'Total'){
         if(gubun2 === 'Money'){//총 액수만 반환
-            if(gubun1 === 'Year'){//연도별
+            if(gubun1 === 'Year'){//연도별 예로 5/5일부터 시작해도 그 해 데이터를 다 추출함
                 var Total = '';
                 while(startYear<=endYear){
                     if(startYear != endYear){

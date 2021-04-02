@@ -27,6 +27,7 @@ router.get('/:store_code',async(req,res,next)=>{
             //order의 table_num을 중복되는건 제거하고 갯수를 세어서 뺀다
             //결과값은 현재 남은 테이블의 수가 된다.
             where:{store_code:req.params.store_code,table_num:{[Op.gt]:0}},
+            //테이블 번호 0 초과만 읽도록. 0은 포장이라 읽으면 안됨
             group:"store_code",
             //가게별로 그룹화 시킴
         })

@@ -104,8 +104,37 @@ router.route('/')// orders/로 get방식일 때
         if(gubun2 === 'Money'){//총 액수만 반환
             if(gubun1 === 'Year'){//연도별 예로 5/5일부터 시작해도 그 해 데이터를 다 추출함
                 var Total = '';
+                var first = 0;
                 while(startYear<=endYear){
-                    if(startYear != endYear){
+                    if(first == 0){
+                        console.log(first);
+                        var startTime = start +'T00:00:00.00Z';
+                        var endTime = startYear+'-12-31T23:59:59.00Z';
+                        //1년 단위로 잘랐음 23시 59분 59초까지
+                        console.log(startTime);
+                        console.log(endTime);
+                        try{
+                            var YearMoney = await Analysis.findAll({
+                               where:{
+                                   store_code:code,
+                                   time:{
+                                       [Op.between]:[startTime,endTime]
+                                   }
+                                },
+                                attributes:[
+                                    [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
+                                ]
+                            
+                                
+                            })
+    
+                        }catch(err){
+                            console.error(err);
+                            next(err);
+                        }
+                        first =1;
+                    }
+                    else if(first = 1 && startYear != endYear){
                         var startTime = startYear +'-01-01T00:00:00.00Z';
                         var endTime = startYear+'-12-31T23:59:59.00Z';
                         //1년 단위로 잘랐음 23시 59분 59초까지
@@ -133,7 +162,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -205,7 +234,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -282,7 +311,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -356,7 +385,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -433,7 +462,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{
@@ -508,7 +537,7 @@ router.route('/')// orders/로 get방식일 때
                     }else{
                         console.log(end);
                         startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'-12-31T23:59:59.00Z'
+                        endTime = end+'T23:59:59.00Z'
                         try{
                             YearMoney = await Analysis.findAll({
                                where:{

@@ -5,6 +5,7 @@ const Analysis = require('../models/analysis');
 const Store = require('../models/store');
 const Sequelize = require('sequelize');
 const models = require('../models');
+const Op = Sequelize.Op;
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ router.get('/:store_code',async(req,res,next)=>{
             //쿼리문을 그대로 가져온 저 문자열로 위에서 읽은 store.table_cnt에서 
             //order의 table_num을 중복되는건 제거하고 갯수를 세어서 뺀다
             //결과값은 현재 남은 테이블의 수가 된다.
-            where:{store_code:req.params.store_code},
+            where:{store_code:req.params.store_code,table_num:{[Op.gt]:0}},
             group:"store_code",
             //가게별로 그룹화 시킴
         })

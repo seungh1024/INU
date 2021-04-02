@@ -30,7 +30,7 @@ module.exports = class Analysis extends Sequelize.Model{
                 type:Sequelize.INTEGER,
                 allowNull:true,
             },
-            inout:{//조리여부 -> 1이면 매장, 0이면 포장 및 기타주문
+            inout:{//포장여부 -> 1이면 매장, 0이면 앱주문
                 type:Sequelize.INTEGER,
                 allowNull:true,
             },

@@ -13,7 +13,7 @@ router.get('/:store_code',async(req,res,next)=>{
     //해당가게의 주문들을 모두 가져옴
     console.log(req.body);
     try{
-        const orders = await Order.findAll({
+        var orders = await Order.findAll({
             include:[{
                 model:Store,
                 attributes:["table_cnt"],
@@ -29,9 +29,10 @@ router.get('/:store_code',async(req,res,next)=>{
             group:"store_code",
             //가게별로 그룹화 시킴
         })
-        if(orders.store_code == null){
+        console.log(orders.store_code);
+        if(orders == ''){
             try{
-                const stores = await Store.findOne({
+                var stores = await Store.findOne({
                     attributes:["table_cnt"],
                     where:{store_code:req.params.store_code},
                 })

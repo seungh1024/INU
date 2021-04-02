@@ -29,8 +29,23 @@ router.get('/:store_code',async(req,res,next)=>{
             group:"store_code",
             //가게별로 그룹화 시킴
         })
-        res.json(orders);
-        console.log(orders);
+        if(orders.store_code == null){
+            try{
+                const stores = await Store.findOne({
+                    attributes:["table_cnt"],
+                    where:{store_code:req.params.store_code},
+                })
+                res.json(stores);
+            }catch(err){
+                console.error(err);
+                next(err);
+            }
+            
+        }else{
+            res.json(orders);
+            console.log(orders);
+        }
+        
     }catch(err){
         console.error(err);
         next(err);

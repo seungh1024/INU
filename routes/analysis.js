@@ -86,378 +86,231 @@ router.route('/')// orders/로 get방식일 때
      //세 번째로 마감일에 해당하는 년도부터 마감일 까지의 데이터
      //이렇게 세개가 더해져서 각각 년도별로 대괄호로 구분되어 문자열로 반환된다.
 
+//------------------연도별------------------------------
      //TotalMoneyYear일 때 해당 데이터 찾아서 반환하는 함수
-    async function TotalMoneyYear(startYear,endYear,start,end,code){
+    async function TotalMoneyYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
         if(gubun1 === 'Year'){//연도별 예로 5/5일부터 시작해도 그 해 데이터를 다 추출함
             var Total = '';
-            var first = 0;
+            if(startMonth<10){
+                startMonth = '0'+startMonth
+            }
+            if(startDay<10){
+                startDay = '0'+startDay
+            }
+            if(endMonth<10){
+                endMonth = '0' +endMonth;
+            }
+            if(endDay<10){
+                endDay = '0'+endDay;
+            }
+            var lastMonth ='12';
+            var lastDay ='31';
             while(startYear<=endYear){
-                if(first == 0){
-                    console.log(first);
-                    var startTime = start +'T00:00:00.00Z';
-                    var endTime = startYear+'-12-31T23:59:59.00Z';
-                    //1년 단위로 잘랐음 23시 59분 59초까지
-                    console.log(startTime);
-                    console.log(endTime);
-                    try{
-                        var YearMoney = await Analysis.findAll({
-                           where:{
-                               store_code:code,
-                               time:{
-                                   [Op.between]:[startTime,endTime]
-                               }
-                            },
-                            attributes:[
-                                [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                            ]
-                        
-                            
-                        })
-
-                    }catch(err){
-                        console.error(err);
-                        next(err);
-                    }
-                    first =1;
+                if(startYear == endYear){
+                    lastMonth = endMonth;
+                    lastDay =endDay;
                 }
-                else if(first = 1 && startYear != endYear){
-                    var startTime = startYear +'-01-01T00:00:00.00Z';
-                    var endTime = startYear+'-12-31T23:59:59.00Z';
-                    //1년 단위로 잘랐음 23시 59분 59초까지
-                    console.log(startTime);
-                    console.log(endTime);
-                    try{
-                        var YearMoney = await Analysis.findAll({
-                           where:{
-                               store_code:code,
-                               time:{
-                                   [Op.between]:[startTime,endTime]
-                               }
-                            },
-                            attributes:[
-                                [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                            ]
+                var startTime = startYear+'-'+ startMonth+'-'+ startDay +'T00:00:00.00Z';
+                var endTime = startYear+'-'+lastMonth+ '-'+lastDay+ 'T23:59:59.00Z';
+                //1년 단위로 잘랐음 23시 59분 59초까지
+                console.log(startTime);
+                console.log(endTime);
+                try{
+                    var YearMoney = await Analysis.findAll({
+                       where:{
+                           store_code:code,
+                           time:{
+                               [Op.between]:[startTime,endTime]
+                           }
+                        },
+                        attributes:[
+                            [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
+                        ]
+                    
                         
-                            
-                        })
+                    })
 
-                    }catch(err){
-                        console.error(err);
-                        next(err);
-                    }
-                }else{
-                    console.log(end);
-                    startTime = startYear +'-01-01T00:00:00.00Z';
-                    endTime = end+'T23:59:59.00Z'
-                    try{
-                        YearMoney = await Analysis.findAll({
-                           where:{
-                               store_code:code,
-                               time:{
-                                   [Op.between]:[startTime,endTime]
-                               },
-                            
-                            } ,
-                            attributes:[
-                                [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                            ],
-                            //group:'menu_name'
-                        })
-
-                    }catch(err){
-                        console.error(err);
-                        next(err);
-                    }
+                }catch(err){
+                    console.error(err);
+                    next(err);
                 }
                 
                 Total += JSON.stringify(YearMoney);
                 console.log(Total);
-                startYear +=1;
-                // code = '2';
-            }
+                startYear +=1;//1년단위니까 더해줌
+                startMonth = '01';//첫 시작월을 읽어왔고 수행했으니 매년 첫 달인 01로 세팅
+                startDay = '01';//마찬가지로 첫 시작일을 읽어왔고 수행했으니 매년 첫 일인 01로 세팅
+        }        
             res.send(Total);
         }
     }
     //TotalMenuYear 일 때 해당 데이터 찾아서 반환하는 함수
-    async function TotalMenuYear(startYear,endYear,start,end,code){
+    async function TotalMenuYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
         var Total = '';
-                var first = 0;
-                while(startYear<=endYear){
-                    if(first == 0){
-                        console.log(first);
-                        var startTime = start +'T00:00:00.00Z';
-                        var endTime = startYear+'-12-31T23:59:59.00Z';
-                        //1년 단위로 잘랐음 23시 59분 59초까지
-                        console.log(startTime);
-                        console.log(endTime);
-                        try{
-                            var YearMoney = await Analysis.findAll({
-                               where:{
-                                   store_code:code,
-                                   time:{
-                                       [Op.between]:[startTime,endTime],
-                                   }
-                                },
-                                attributes:[
-                                    'menu_name',
-                                    [Sequelize.literal('SUM(menu_cnt)'),'count']
-                                ],
-                                group:'menu_name',
-                                
-                            })
-    
-                        }catch(err){
-                            console.error(err);
-                            next(err);
-                        }
-                        first =1;
-                    }
-                    else if(startYear != endYear){
-                        var startTime = startYear +'-01-01T00:00:00.00Z';
-                        var endTime = startYear+'-12-31T23:59:59.00Z';
-                        console.log(startTime);
-                        console.log(endTime);
-                        try{
-                            var YearMoney = await Analysis.findAll({
-                               where:{
-                                   store_code:code,
-                                   time:{
-                                       [Op.between]:[startTime,endTime]
-                                   }
-                                },
-                                attributes:[
-                                    'menu_name',
-                                    [Sequelize.literal('SUM(menu_cnt)'),'count']
-                                ],
-                                group:'menu_name',
-                            
-                                
-                            })
-    
-                        }catch(err){
-                            console.error(err);
-                            next(err);
-                        }
-                    }else{
-                        console.log(end);
-                        startTime = startYear +'-01-01T00:00:00.00Z';
-                        endTime = end+'T23:59:59.00Z'
-                        try{
-                            YearMoney = await Analysis.findAll({
-                               where:{
-                                   store_code:code,
-                                   time:{
-                                       [Op.between]:[startTime,endTime]
-                                   },
-                                
-                                } ,
-                                attributes:[
-                                    'menu_name',
-                                    [Sequelize.literal('SUM(menu_cnt)'),'count']
-                                ],
-                                group:'menu_name'
-                            })
-    
-                        }catch(err){
-                            console.error(err);
-                            next(err);
-                        }
-                    }
+        if(startMonth<10){
+            startMonth = '0'+startMonth
+        }
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
+        if(endMonth<10){
+            endMonth = '0' +endMonth;
+        }
+        if(endDay<10){
+            endDay = '0'+endDay;
+        }
+        var lastMonth ='12';
+        var lastDay ='31';
+        while(startYear<=endYear){
+            if(startYear == endYear){
+                lastMonth = endMonth;
+                lastDay =endDay;
+            }
+            var startTime = startYear+'-'+ startMonth+'-'+ startDay +'T00:00:00.00Z';
+            var endTime = startYear+'-'+lastMonth+ '-'+lastDay +'T23:59:59.00Z';
+            //1년 단위로 잘랐음 23시 59분 59초까지
+            console.log(startTime);
+            console.log(endTime);
+            try{
+                var YearMoney = await Analysis.findAll({
+                   where:{
+                       store_code:code,
+                       time:{
+                           [Op.between]:[startTime,endTime],
+                       }
+                    },
+                    attributes:[
+                        'menu_name',
+                        [Sequelize.literal('SUM(menu_cnt)'),'count']
+                    ],
+                    group:'menu_name',
                     
-                    Total += JSON.stringify(YearMoney);
-                    console.log(Total);
-                    startYear +=1;
-                    // code = '2';
-                }
-                res.send(Total);
+                })
+
+            }catch(err){
+                console.error(err);
+                next(err);
+            }
+            Total += JSON.stringify(YearMoney);
+            console.log(Total);
+            startYear +=1;//1년단위니까 더해줌
+            startMonth = '01';//첫 시작월을 읽어왔고 수행했으니 매년 첫 달인 01로 세팅
+            startDay = '01';//마찬가지로 첫 시작일을 읽어왔고 수행했으니 매년 첫 일인 01로 세팅    
+        }      
+        res.send(Total);
     }
     //inout 값이 있고 MoneyYear일 때 해당 데이터를 찾아서 변환하는 함수
     //other 값이 inout에 들어갈 값임
-    async function OtherMoneyYear(startYear,endYear,start,end,code,other){
+    async function OtherMoneyYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
         var Total = '';
-        var first = 0;
+        if(startMonth<10){
+            startMonth = '0'+startMonth
+        }
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
+        if(endMonth<10){
+            endMonth = '0' +endMonth;
+        }
+        if(endDay<10){
+            endDay = '0'+endDay;
+        }
+        var lastMonth ='12';
+        var lastDay ='31';
         while(startYear<=endYear){
-            if(first == 0){
-                console.log(first);
-                var startTime = start +'T00:00:00.00Z';
-                var endTime = startYear+'-12-31T23:59:59.00Z';
-                //1년 단위로 잘랐음 23시 59분 59초까지
-                console.log(startTime);
-                console.log(endTime);
-                try{
-                    var YearMoney = await Analysis.findAll({
-                       where:{
-                           store_code:code,
-                           inout:other,
-                           time:{
-                               [Op.between]:[startTime,endTime]
-                           }
-                        },
-                        attributes:[
-                            [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                        ]
-                        
-                    })
-
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
-                first =1;
+            if(startYear == endYear){
+                lastMonth = endMonth;
+                lastDay =endDay;
             }
-            else if(startYear != endYear){
-                var startTime = startYear +'-01-01T00:00:00.00Z';
-                var endTime = startYear+'-12-31T23:59:59.00Z';
-                console.log(startTime);
-                console.log(endTime);
-                try{
-                    var YearMoney = await Analysis.findAll({
-                       where:{
-                           store_code:code,
-                           inout:other,
-                           time:{
-                               [Op.between]:[startTime,endTime]
-                           }
-                        },
-                        attributes:[
-                            [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                        ]
+            var startTime = startYear+'-'+ startMonth+'-'+ startDay +'T00:00:00.00Z';
+            var endTime = startYear+'-'+lastMonth+ '-'+lastDay +'T23:59:59.00Z';
+            //1년 단위로 잘랐음 23시 59분 59초까지
+            console.log(startTime);
+            console.log(endTime);
+            try{
+                var YearMoney = await Analysis.findAll({
+                   where:{
+                       store_code:code,
+                       inout:other,
+                       time:{
+                           [Op.between]:[startTime,endTime]
+                       }
+                    },
+                    attributes:[
+                        [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
+                    ]
                     
-                        
-                    })
+                })
 
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
-            }else{
-                console.log(end);
-                startTime = startYear +'-01-01T00:00:00.00Z';
-                endTime = end+'T23:59:59.00Z'
-                try{
-                    YearMoney = await Analysis.findAll({
-                       where:{
-                           store_code:code,
-                           inout:other,
-                           time:{
-                               [Op.between]:[startTime,endTime]
-                           },
-                        
-                        } ,
-                        attributes:[
-                            [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
-                        ]
-                    })
-
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
+            }catch(err){
+                console.error(err);
+                next(err);
             }
             
             Total += JSON.stringify(YearMoney);
             console.log(Total);
-            startYear +=1;
-            // code = '2';
+            startYear +=1;//1년단위니까 더해줌
+            startMonth = '01';//첫 시작월을 읽어왔고 수행했으니 매년 첫 달인 01로 세팅
+            startDay = '01';//마찬가지로 첫 시작일을 읽어왔고 수행했으니 매년 첫 일인 01로 세팅     
         }
+             
         res.send(Total);
         
     }
     //inout 값이 들어가고 MenuYear로 구분하여 처리해주는 함수
-    async function OtherMenuYear(startYear,endYear,start,end,code,other){
+    async function OtherMenuYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
         var Total = '';
-        var first = 0;
+        if(startMonth<10){
+            startMonth = '0'+startMonth
+        }
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
+        if(endMonth<10){
+            endMonth = '0' +endMonth;
+        }
+        if(endDay<10){
+            endDay = '0'+endDay;
+        }
+        var lastMonth ='12';
+        var lastDay ='31';
         while(startYear<=endYear){
-            if(first == 0){
-                console.log(first);
-                var startTime = start +'T00:00:00.00Z';
-                var endTime = startYear+'-12-31T23:59:59.00Z';
-                //1년 단위로 잘랐음 23시 59분 59초까지
-                console.log(startTime);
-                console.log(endTime);
-                try{
-                    var YearMoney = await Analysis.findAll({
-                        where:{
-                            store_code:code,
-                            inout:other,
-                            time:{
-                                [Op.between]:[startTime,endTime]
-                            }
-                         },
-                         attributes:[
-                             'menu_name',
-                             [Sequelize.literal('SUM(menu_cnt)'),'count']
-                         ],
-                         group:'menu_name',
-                     
-                         
-                     })
-
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
-                first =1;
+            if(startYear == endYear){
+                lastMonth = endMonth;
+                lastDay =endDay;
             }
-            else if(startYear != endYear){
-                var startTime = startYear +'-01-01T00:00:00.00Z';
-                var endTime = startYear+'-12-31T23:59:59.00Z';
-                console.log(startTime);
-                console.log(endTime);
-                try{
-                    var YearMoney = await Analysis.findAll({
-                        where:{
-                            store_code:code,
-                            inout:other,
-                            time:{
-                                [Op.between]:[startTime,endTime]
-                            }
-                         },
-                         attributes:[
-                             'menu_name',
-                             [Sequelize.literal('SUM(menu_cnt)'),'count']
-                         ],
-                         group:'menu_name',
+            var startTime = startYear+'-'+ startMonth+'-'+ startDay +'T00:00:00.00Z';
+            var endTime = startYear+'-'+lastMonth+ '-'+lastDay+'T23:59:59.00Z';
+            //1년 단위로 잘랐음 23시 59분 59초까지
+            console.log(startTime);
+            console.log(endTime);
+            try{
+                var YearMoney = await Analysis.findAll({
+                    where:{
+                        store_code:code,
+                        inout:other,
+                        time:{
+                            [Op.between]:[startTime,endTime]
+                        }
+                     },
+                     attributes:[
+                         'menu_name',
+                         [Sequelize.literal('SUM(menu_cnt)'),'count']
+                     ],
+                     group:'menu_name',
+                 
                      
-                         
-                     })
+                 })
 
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
-            }else{
-                console.log(end);
-                var startTime = startYear +'-01-01T00:00:00.00Z';
-                var endTime = end+'T23:59:59.00Z'
-                try{
-                    YearMoney = await Analysis.findAll({
-                        where:{
-                            store_code:code,
-                            inout:other,
-                            time:{
-                                [Op.between]:[startTime,endTime]
-                            }
-                         },
-                         attributes:[
-                             'menu_name',
-                             [Sequelize.literal('SUM(menu_cnt)'),'count']
-                         ],
-                         group:'menu_name',
-                     
-                         
-                     })
-
-                }catch(err){
-                    console.error(err);
-                    next(err);
-                }
+            }catch(err){
+                console.error(err);
+                next(err);
             }
-            
             Total += JSON.stringify(YearMoney);
             console.log(Total);
-            startYear +=1;
-            // code = '2';
+            startYear +=1;//1년단위니까 더해줌
+            startMonth = '01';//첫 시작월을 읽어왔고 수행했으니 매년 첫 달인 01로 세팅
+            startDay = '01';//마찬가지로 첫 시작일을 읽어왔고 수행했으니 매년 첫 일인 01로 세팅 
         }
         res.send(Total);
     }
@@ -842,7 +695,7 @@ router.route('/')// orders/로 get방식일 때
      if(gubun3 === 'Total'){
         if(gubun2 === 'Money'){//총 액수만 반환
             if(gubun1 === 'Year'){//연도별 예로 5/5일부터 시작해도 그 해 데이터를 다 추출함
-                TotalMoneyYear(startYear,endYear,start,end,code);
+                TotalMoneyYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
             }
             else if(gubun1 === 'Month'){//월별
                 TotalMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
@@ -856,7 +709,7 @@ router.route('/')// orders/로 get방식일 때
         }
         else{//메뉴별로 반환
             if(gubun1 === 'Year'){//연도별
-                TotalMenuYear(startYear,endYear,start,end,code);
+                TotalMenuYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
             }
             else if(gubun1 === 'Month'){//월별
                 TotalMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
@@ -875,7 +728,7 @@ router.route('/')// orders/로 get방식일 때
      else if(gubun3 === 'Store'){
         if(gubun2 === 'Money'){//토탈금액 반환
             if(gubun1 === 'Year'){//연도별
-                OtherMoneyYear(startYear,endYear,start,end,code,1);
+                OtherMoneyYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
 
             }
             else if(gubun1 === 'Month'){//월별
@@ -891,7 +744,7 @@ router.route('/')// orders/로 get방식일 때
         }
         else{//메뉴주문량 반환
             if(gubun1 === 'Year'){//연도별
-                OtherMenuYear(startYear,endYear,start,end,code,1);
+                OtherMenuYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
             }
             else if(gubun1 === 'Month'){//월별
                 //gubun3이 store이므로 other 값을 1로 세팅
@@ -910,7 +763,7 @@ router.route('/')// orders/로 get방식일 때
      else{
         if(gubun2 === 'Money'){//토탈 금액 반환
             if(gubun1 === 'Year'){//연도별
-                OtherMoneyYear(startYear,endYear,start,end,code,0);
+                OtherMoneyYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else if(gubun1 === 'Month'){//월별
                 //gubun3이 total이나 store가 아니므로 other 값을 0으로 세팅
@@ -925,7 +778,7 @@ router.route('/')// orders/로 get방식일 때
         }
         else{//메뉴당 주문량 반환
             if(gubun1 === 'Year'){//연도별
-                OtherMenuYear(startYear,endYear,start,end,code,0);
+                OtherMenuYear(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else if(gubun1 === 'Month'){//월별
                 //gubun3이 total이나 store가 아니므로 other 값을 0으로 세팅

@@ -462,9 +462,13 @@ router.route('/')// orders/로 get방식일 때
         res.send(Total);
     }
 
+//-----------월별-------------------------------------
     //매장주문,앱주문 토탈 월별 총금액을 반환하는 함수
     async function TotalMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
         var Total = '';
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
         while(startYear<=endYear){
             var Day31 = '-31'
             while(startMonth<=12){
@@ -554,6 +558,9 @@ router.route('/')// orders/로 get방식일 때
     //매장주문,앱주문 토탈 월별 메뉴별주문량을 반환하는 함수
     async function TotalMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
         var Total = '';
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
         while(startYear<=endYear){
             var Day31 = '-31'
             while(startMonth<=12){
@@ -597,7 +604,6 @@ router.route('/')// orders/로 get방식일 때
                         break;
                     }
                 }
-                
                 var startTime = startYear+'-'+ Month+'-'+startDay+'T00:00:00.00Z';
                 var endTime = startYear+'-'+ Month + Day31 +'T23:59:59.00Z';
                 //1개월 단위로 잘랐음
@@ -646,6 +652,9 @@ router.route('/')// orders/로 get방식일 때
     //other 값이 analysis테이블에서 inout 값이며 1이면 매장, 0이면 앱주문으로 사용
     async function OtherMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
         var Total = '';
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
         while(startYear<=endYear){
             var Day31 = '-31'
             while(startMonth<=12){
@@ -689,7 +698,6 @@ router.route('/')// orders/로 get방식일 때
                         break;
                     }
                 }
-                
                 var startTime = startYear+'-'+ Month+'-'+startDay+'T00:00:00.00Z';
                 var endTime = startYear+'-'+ Month + Day31 +'T23:59:59.00Z';
                 //1개월 단위로 잘랐음
@@ -737,6 +745,9 @@ router.route('/')// orders/로 get방식일 때
     //other 값이 analysis테이블에서 inout 값이며 1이면 매장, 0이면 앱주문으로 사용
     async function OtherMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
         var Total = '';
+        if(startDay<10){
+            startDay = '0'+startDay
+        }
         while(startYear<=endYear){
             var Day31 = '-31'
             while(startMonth<=12){

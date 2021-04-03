@@ -691,6 +691,387 @@ router.route('/')// orders/로 get방식일 때
         res.send(Total);
     }
 
+//---------------일별-----------------------------------
+    //모든주문 일별 총금액을 반환하는 함수
+    async function TotalMoneyDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
+    var Total = '';
+    var firstDay = '';//날짜 쿼리에 들어갈 변수
+    var firstYear = startYear;
+    while(startYear<=endYear){
+        var Day31 = '-31'
+        while(startMonth<=12){
+            if(startMonth<10){//10보다 작으면 앞에 0을 붙여줌
+                var Month ='0'+startMonth;//0을붙여 문자열로 만들어줌
+                
+            }else{
+                var Month = startMonth.toString();//두자리수는 그대로
+            }
+            
+            if(Month == endMonth && startYear == endYear){//마지막해의 마지막달이면
+                Day31 = endDay;
+            }else{
+                switch(Month){
+                    case '01':Day31 = 31;
+                    break;
+                    case '02':Day31=28;
+                    break;
+                    case '03':Day31 = 31;
+                    break;
+                    case '04':Day31=30;
+                    break;
+                    case '05':Day31=31;
+                    break;
+                    case '06':Day31 = 30;
+                    break;
+                    case '07':Day31=31;
+                    break;
+                    case '08':Day31=31;
+                    break;
+                    case '09':Day31=30;
+                    break;
+                    case '10':Day31=31;
+                    break;
+                    case '11':Day31=30;
+                    break;
+                    case '12':Day31=31;
+                    break;
+                }
+            }
+            while(startDay<=Day31){//한달동안 매일 반복하는 것
+                if(startDay<10){//한자리 수면 2자리로 맞춰줌
+                    firstDay = '0'+startDay;
+                    //시작일
+                }else{
+                    firstDay = startDay;
+                }
+                var startTime = startYear+'-'+ Month+'-'+firstDay+'T00:00:00.00Z';
+                var endTime = startYear+'-'+ Month + '-'+firstDay +'T23:59:59.00Z';
+                //1개월 단위로 잘랐음
+                console.log(startTime);
+                console.log(endTime);
+                try{
+                    var YearMoney = await Analysis.findAll({
+                        where:{
+                            store_code:code,
+                            time:{
+                                [Op.between]:[startTime,endTime]
+                            }
+                         },
+                         attributes:[
+                            [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
+                        ]
+                         
+                     })
+                     Total += JSON.stringify(YearMoney);
+
+                }catch(err){
+                    console.error(err);
+                    next(err);
+                }
+                
+                startDay +=1;//여기선 비교를 위해 숫자로 시작일로 세팅해줌
+            }
+            if(startYear == endYear && startMonth == endMonth){
+                break;
+            }
+            startMonth +=1;//1을 더해서 개월을 올림
+            startDay=1;//첫날을 다시 초기화 해줌
+            
+        }
+        startYear += 1;
+        startMonth = 1;  
+        //년을 올리고 월은 첫달로 세팅
+        console.log(Total);
+    }
+
+    res.send(Total);            
+    }
+    async function TotalMenuDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code){
+        var Total = '';
+        var firstDay = '';//날짜 쿼리에 들어갈 변수
+        var firstYear = startYear;
+        while(startYear<=endYear){
+            var Day31 = '-31'
+            while(startMonth<=12){
+                if(startMonth<10){//10보다 작으면 앞에 0을 붙여줌
+                    var Month ='0'+startMonth;//0을붙여 문자열로 만들어줌
+                    
+                }else{
+                    var Month = startMonth.toString();//두자리수는 그대로
+                }
+                
+                if(Month == endMonth && startYear == endYear){//마지막해의 마지막달이면
+                    Day31 = endDay;
+                }else{
+                    switch(Month){
+                        case '01':Day31 = 31;
+                        break;
+                        case '02':Day31=28;
+                        break;
+                        case '03':Day31 = 31;
+                        break;
+                        case '04':Day31=30;
+                        break;
+                        case '05':Day31=31;
+                        break;
+                        case '06':Day31 = 30;
+                        break;
+                        case '07':Day31=31;
+                        break;
+                        case '08':Day31=31;
+                        break;
+                        case '09':Day31=30;
+                        break;
+                        case '10':Day31=31;
+                        break;
+                        case '11':Day31=30;
+                        break;
+                        case '12':Day31=31;
+                        break;
+                    }
+                }
+                while(startDay<=Day31){//한달동안 매일 반복하는 것
+                    if(startDay<10){//한자리 수면 2자리로 맞춰줌
+                        firstDay = '0'+startDay;
+                        //시작일
+                    }else{
+                        firstDay = startDay;
+                    }
+                    var startTime = startYear+'-'+ Month+'-'+firstDay+'T00:00:00.00Z';
+                    var endTime = startYear+'-'+ Month + '-'+firstDay +'T23:59:59.00Z';
+                    //1개월 단위로 잘랐음
+                    console.log(startTime);
+                    console.log(endTime);
+                    try{
+                        var YearMoney = await Analysis.findAll({
+                            where:{
+                                store_code:code,
+                                time:{
+                                    [Op.between]:[startTime,endTime]
+                                }
+                             },
+                             attributes:[
+                                'menu_name',
+                                [Sequelize.literal('SUM(menu_cnt)'),'count']
+                            ],
+                            group:'menu_name',
+                             
+                         })
+                         Total += JSON.stringify(YearMoney);
+    
+                    }catch(err){
+                        console.error(err);
+                        next(err);
+                    }
+                    
+                    startDay +=1;//여기선 비교를 위해 숫자로 시작일로 세팅해줌
+                }
+                if(startYear == endYear && startMonth == endMonth){
+                    break;
+                }
+                startMonth +=1;//1을 더해서 개월을 올림
+                startDay=1;//첫날을 다시 초기화 해줌
+                
+            }
+            startYear += 1;
+            startMonth = 1;  
+            //년을 올리고 월은 첫달로 세팅
+            console.log(Total);
+        }
+    
+        res.send(Total);
+    }
+    async function OtherMoneyDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
+        var Total = '';
+        var firstDay = '';//날짜 쿼리에 들어갈 변수
+        var firstYear = startYear;
+        while(startYear<=endYear){
+            var Day31 = '-31'
+            while(startMonth<=12){
+                if(startMonth<10){//10보다 작으면 앞에 0을 붙여줌
+                    var Month ='0'+startMonth;//0을붙여 문자열로 만들어줌
+                    
+                }else{
+                    var Month = startMonth.toString();//두자리수는 그대로
+                }
+                
+                if(Month == endMonth && startYear == endYear){//마지막해의 마지막달이면
+                    Day31 = endDay;
+                }else{
+                    switch(Month){
+                        case '01':Day31 = 31;
+                        break;
+                        case '02':Day31=28;
+                        break;
+                        case '03':Day31 = 31;
+                        break;
+                        case '04':Day31=30;
+                        break;
+                        case '05':Day31=31;
+                        break;
+                        case '06':Day31 = 30;
+                        break;
+                        case '07':Day31=31;
+                        break;
+                        case '08':Day31=31;
+                        break;
+                        case '09':Day31=30;
+                        break;
+                        case '10':Day31=31;
+                        break;
+                        case '11':Day31=30;
+                        break;
+                        case '12':Day31=31;
+                        break;
+                    }
+                }
+                while(startDay<=Day31){//한달동안 매일 반복하는 것
+                    if(startDay<10){//한자리 수면 2자리로 맞춰줌
+                        firstDay = '0'+startDay;
+                        //시작일
+                    }else{
+                        firstDay = startDay;
+                    }
+                    var startTime = startYear+'-'+ Month+'-'+firstDay+'T00:00:00.00Z';
+                    var endTime = startYear+'-'+ Month + '-'+firstDay +'T23:59:59.00Z';
+                    //1개월 단위로 잘랐음
+                    console.log(startTime);
+                    console.log(endTime);
+                    try{
+                        var YearMoney = await Analysis.findAll({
+                            where:{
+                                store_code:code,
+                                inout:other,
+                                time:{
+                                    [Op.between]:[startTime,endTime]
+                                }
+                             },
+                             attributes:[
+                                [Sequelize.literal('SUM(price*menu_cnt)'),'Money']
+                            ]
+                             
+                         })
+                         Total += JSON.stringify(YearMoney);
+    
+                    }catch(err){
+                        console.error(err);
+                        next(err);
+                    }
+                    
+                    startDay +=1;//여기선 비교를 위해 숫자로 시작일로 세팅해줌
+                }
+                if(startYear == endYear && startMonth == endMonth){
+                    break;
+                }
+                startMonth +=1;//1을 더해서 개월을 올림
+                startDay=1;//첫날을 다시 초기화 해줌
+                
+            }
+            startYear += 1;
+            startMonth = 1;  
+            //년을 올리고 월은 첫달로 세팅
+            console.log(Total);
+        }
+    
+        res.send(Total);
+    }
+    async function OtherMenuDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,other){
+        var Total = '';
+        var firstDay = '';//날짜 쿼리에 들어갈 변수
+        var firstYear = startYear;
+        while(startYear<=endYear){
+            var Day31 = '-31'
+            while(startMonth<=12){
+                if(startMonth<10){//10보다 작으면 앞에 0을 붙여줌
+                    var Month ='0'+startMonth;//0을붙여 문자열로 만들어줌
+                    
+                }else{
+                    var Month = startMonth.toString();//두자리수는 그대로
+                }
+                
+                if(Month == endMonth && startYear == endYear){//마지막해의 마지막달이면
+                    Day31 = endDay;
+                }else{
+                    switch(Month){
+                        case '01':Day31 = 31;
+                        break;
+                        case '02':Day31=28;
+                        break;
+                        case '03':Day31 = 31;
+                        break;
+                        case '04':Day31=30;
+                        break;
+                        case '05':Day31=31;
+                        break;
+                        case '06':Day31 = 30;
+                        break;
+                        case '07':Day31=31;
+                        break;
+                        case '08':Day31=31;
+                        break;
+                        case '09':Day31=30;
+                        break;
+                        case '10':Day31=31;
+                        break;
+                        case '11':Day31=30;
+                        break;
+                        case '12':Day31=31;
+                        break;
+                    }
+                }
+                while(startDay<=Day31){//한달동안 매일 반복하는 것
+                    if(startDay<10){//한자리 수면 2자리로 맞춰줌
+                        firstDay = '0'+startDay;
+                        //시작일
+                    }else{
+                        firstDay = startDay;
+                    }
+                    var startTime = startYear+'-'+ Month+'-'+firstDay+'T00:00:00.00Z';
+                    var endTime = startYear+'-'+ Month + '-'+firstDay +'T23:59:59.00Z';
+                    //1개월 단위로 잘랐음
+                    console.log(startTime);
+                    console.log(endTime);
+                    try{
+                        var YearMoney = await Analysis.findAll({
+                            where:{
+                                store_code:code,
+                                inout:other,
+                                time:{
+                                    [Op.between]:[startTime,endTime]
+                                }
+                             },
+                             attributes:[
+                                'menu_name',
+                                [Sequelize.literal('SUM(menu_cnt)'),'count']
+                            ],
+                            group:'menu_name',
+                             
+                         })
+                         Total += JSON.stringify(YearMoney);
+    
+                    }catch(err){
+                        console.error(err);
+                        next(err);
+                    }
+                    
+                    startDay +=1;//여기선 비교를 위해 숫자로 시작일로 세팅해줌
+                }
+                if(startYear == endYear && startMonth == endMonth){
+                    break;
+                }
+                startMonth +=1;//1을 더해서 개월을 올림
+                startDay=1;//첫날을 다시 초기화 해줌
+                
+            }
+            startYear += 1;
+            startMonth = 1;  
+            //년을 올리고 월은 첫달로 세팅
+            console.log(Total);
+        }
+    
+        res.send(Total);
+    }
+
      //포장,매장 전체 
      if(gubun3 === 'Total'){
         if(gubun2 === 'Money'){//총 액수만 반환
@@ -701,7 +1082,7 @@ router.route('/')// orders/로 get방식일 때
                 TotalMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
             }
             else if(gubun1 === 'Day'){//일별
-
+                TotalMoneyDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
             }
             else{//시간별
 
@@ -715,7 +1096,7 @@ router.route('/')// orders/로 get방식일 때
                 TotalMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code);
             }
             else if(gubun1 === 'Day'){//일별
-
+                TotalMenuDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code)
             }
             else{//시간별
 
@@ -736,7 +1117,7 @@ router.route('/')// orders/로 get방식일 때
                 OtherMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
             }
             else if(gubun1 === 'Day'){//일별
-
+                OtherMoneyDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
             }
             else{//시간별
 
@@ -751,7 +1132,7 @@ router.route('/')// orders/로 get방식일 때
                 OtherMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
             }
             else if(gubun1 === 'Day'){//일별
-
+                OtherMenuDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,1);
             }
             else{//시간별
 
@@ -770,7 +1151,7 @@ router.route('/')// orders/로 get방식일 때
                 OtherMoneyMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else if(gubun1 === 'Day'){//일별
-
+                OtherMoneyDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else{//시간별
 
@@ -785,7 +1166,7 @@ router.route('/')// orders/로 get방식일 때
                 OtherMenuMonth(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else if(gubun1 === 'Day'){//일별
-
+                OtherMenuDay(startYear,endYear,startMonth,endMonth,startDay,endDay,code,0);
             }
             else{//시간별
 

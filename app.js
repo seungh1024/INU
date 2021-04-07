@@ -2,7 +2,8 @@ const express = require('express');
 const path=require('path');
 const morgan=require('morgan');
 const nunjucks=require('nunjucks');
-
+const dotenv = require('dotenv');
+dotenv.config();
 const {sequelize}=require('./models');
 //./models 는 ./models/index.js와 같음 폴더내의 index.js파일은 require시 생략가능
 //index.js 에 보면 db를 연동할 수 있게 모듈로 만들어 놓음

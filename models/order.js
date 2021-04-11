@@ -1,4 +1,5 @@
 const Sequelize=require('sequelize');
+const { User } = require('.');
 
 module.exports = class Order extends Sequelize.Model{
     //모듈로 만들고 exports 함
@@ -8,38 +9,43 @@ module.exports = class Order extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            // store_code:{//사업자등록번호
-            //     type:Sequelize.STRING(20),
-            //     allowNull:false,
-            //     primaryKey:true,
-            // },
-            menu_name:{//메뉴명
+            Store_code:{//사업자등록번호
                 type:Sequelize.STRING(20),
                 allowNull:false,
-
+                primaryKey:true,
             },
-            menu_cnt:{//메뉴개수
-                type:Sequelize.INTEGER,
-                allowNull:false,
-            },
-            table_num:{//테이블 번호
-                type:Sequelize.INTEGER,
-                allowNull:false,
-            },
-            cook:{//조리여부
-                type:Sequelize.INTEGER,
-                allowNull:false,
-            },
-            pay:{//조리여부
-                type:Sequelize.INTEGER,
-                allowNull:false,
-            },
-            date:{//주문 일시
+            Menu_name:{//메뉴명
                 type:Sequelize.STRING(20),
-                allowNull:true,
+                allowNull:false,
+                primaryKey:true,
             },
-            time:{//비교를 위한 DATE값으로 이루어진 주문 일시
+            Cnt:{//메뉴개수
+                type:Sequelize.INTEGER,
+                allowNull:false,
+                primaryKey:true,
+            },
+            Table_num:{//테이블 번호 0이면 배달 및 포장
+                type:Sequelize.INTEGER,
+                allowNull:false,
+                primaryKey:true,
+            },
+            Cook:{//조리여부
+                type:Sequelize.INTEGER,
+                allowNull:false,
+            },
+            Pay:{//결제여부
+                type:Sequelize.INTEGER,
+                allowNull:false,
+            },
+            
+            Time:{//주문시각을 저장함
                 type:Sequelize.DATE,
+                allowNull:true,
+                defaultValue: Sequelize.NOW,
+                primaryKey:true,
+            },
+            Nick:{
+                type:Sequelize.STRING(10),
                 allowNull:true,
             }
         
@@ -84,8 +90,8 @@ module.exports = class Order extends Sequelize.Model{
 
     }
     static associate(db){
-        db.Order.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
-        db.Order.belongsTo(db.Menu,{foreignKey:'store_code',targetKey:'store_code'});
+        db.Order.belongsTo(db.Store,{foreignKey:'Store_code',targetKey:'Store_code'});
+        db.Order.belongsTo(db.Menu,{foreignKey:'Store_code',targetKey:'Store_code'});
         //db.Order.hasMany(db.Analysis,{foreignKey:'menu_name',sourceKey:'menu_name'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함

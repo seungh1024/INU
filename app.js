@@ -14,6 +14,7 @@ const menuRouter = require('./routes/menus');
 const orderRouter = require('./routes/orders');
 const analysisRouter = require('./routes/analysis');
 const tablesRouter = require('./routes/tables');
+const reserveRouter = require('./routes/reserve');
 
 //const commentsRouter = require('./routes/comments');
 
@@ -42,12 +43,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
 app.use('/',indexRouter);
-app.use('/users',usersRouter);
-app.use('/stores',storesRouter);
-app.use('/menus',menuRouter);
-app.use('/orders',orderRouter);
+app.use('/user',usersRouter);
+app.use('/store',storesRouter);
+app.use('/menu',menuRouter);
+app.use('/order',orderRouter);
 app.use('/analysis',analysisRouter);
-app.use('/tables',tablesRouter);
+app.use('/table',tablesRouter);
+app.use('/reserve',reserveRouter);
+
 //app.use('/comments',commentsRouter);
 
 app.use((req,res,next)=>{

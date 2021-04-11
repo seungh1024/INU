@@ -8,20 +8,24 @@ module.exports = class User extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            id:{
+            ID:{
                 type:Sequelize.STRING(20),
-                allowNull:false,
+                allowNull:true,
                 primaryKey:true,
             },
-            pass:{
-                type:Sequelize.INTEGER.UNSIGNED,
-                allowNull:false,
+            PW:{
+                type:Sequelize.INTEGER,
+                allowNull:true,
 
             },
-            name:{
-                type:Sequelize.STRING(20),
-                allowNull:false,
+            Who:{
+                type:Sequelize.INTEGER,
+                allowNull:true,
             },
+            Nick:{
+                type:Sequelize.STRING(20),
+                allowNull:true
+            }
         
             
             //super.init의 첫번째 인수가 테이블 칼럼에 대한 설정
@@ -64,7 +68,7 @@ module.exports = class User extends Sequelize.Model{
 
     }
     static associate(db){
-        db.User.hasMany(db.Store,{foreignKey:'store_code',sourceKey:'id'});
+        db.User.hasMany(db.Store,{foreignKey:'Store_code',sourceKey:'ID'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함
         //hasMany모델에선 sourceKey사용한다고 생각

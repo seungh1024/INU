@@ -8,24 +8,18 @@ module.exports = class Menu extends Sequelize.Model{
         //init은 테이블에 대한 설정을 함
         //associate는 다른 모델과의 관계를 적음
         return super.init({
-            // store_code:{
-            //     type:Sequelize.STRING(10),
-            //     allowNull:false,
-            //     primaryKey:true,
-            // },
-            menu_name:{//메뉴명
+            Store_code:{
                 type:Sequelize.STRING(10),
                 allowNull:false,
-                
             },
-            price:{//가격
+            Menu_name:{//메뉴명
+                type:Sequelize.STRING(10),
+                allowNull:false,
+            },
+            Menu_price:{//가격
                 type:Sequelize.INTEGER.UNSIGNED,
                 allowNull:false,
 
-            },
-            sold:{//품절여부
-                type:Sequelize.INTEGER,
-                allowNull:false,
             },
         
             
@@ -69,8 +63,8 @@ module.exports = class Menu extends Sequelize.Model{
 
     }
     static associate(db){
-        db.Menu.belongsTo(db.Store,{foreignKey:'store_code',targetKey:'store_code'});
-        db.Menu.hasMany(db.Order,{foreignKey:'store_code',targetKey:'store_code'})
+        db.Menu.belongsTo(db.Store,{foreignKey:'Store_code',targetKey:'Store_code'});
+        db.Menu.hasMany(db.Order,{foreignKey:'Store_code',targetKey:'Store_code'})
         //db.Comment.belongsTo(db.User,{foreignKey:'commenter',targetKey:'id'});
         //1:N 관계에서는 1에는 hasMany로 설정하면 알아서 JOIN함
         //N인 곳도 설정해줘야 함 belongsTo로 함

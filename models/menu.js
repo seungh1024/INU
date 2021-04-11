@@ -11,15 +11,16 @@ module.exports = class Menu extends Sequelize.Model{
             Store_code:{
                 type:Sequelize.STRING(10),
                 allowNull:false,
+                primaryKey:true,
             },
             Menu_name:{//메뉴명
                 type:Sequelize.STRING(10),
                 allowNull:false,
+                primaryKey:true,
             },
             Menu_price:{//가격
                 type:Sequelize.INTEGER.UNSIGNED,
                 allowNull:false,
-
             },
         
             

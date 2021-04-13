@@ -7,7 +7,7 @@ const router = express.Router();
 //요청 방식을 바꾸기로함
 //post 방식을 이용하고 안의 데이터를 구분하여 받기로 해서 수정함
 router.post('/',async(req,res,next)=>{
-  if(req.body.Method=='login'){
+  if(req.body.Method=='Login'){
     try{
       const user = await User.findOne({
         attributes:["Nick"],

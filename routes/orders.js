@@ -4,7 +4,6 @@ const Menu = require('../models/menu');
 const Analysis = require('../models/analysis');
 const Sequelize = require('sequelize');
 const Store= require('../models/store');
-const { combineTableNames } = require('sequelize/types/lib/utils');
 const Op = Sequelize.Op;
 
 const router = express.Router();

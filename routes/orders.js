@@ -4,6 +4,8 @@ const Menu = require('../models/menu');
 const Analysis = require('../models/analysis');
 const Sequelize = require('sequelize');
 const Store= require('../models/store');
+const { combineTableNames } = require('sequelize/types/lib/utils');
+const Op = Sequelize.Op;
 
 const router = express.Router();
 
@@ -116,7 +118,7 @@ router.post('/',async(req,res,next)=>{
     }
     //가게 남은 테이블을 로딩해줌
     else if(req.body.Method == "remain_table"){
-        var nick = req.body.Nick;
+        console.log(req.body);
         try{
             var table = await Order.findAll({
                 include:{
@@ -138,39 +140,60 @@ router.post('/',async(req,res,next)=>{
                 // where:Sequelize.where[Sequelize.literal(`(Store.Nick = '${nick}')`)],
                 where:{Nick:req.body.Nick},
                 //group:"Store_code",
-                
-                
             })
                
+            console.log(table);
             res.json(table);
         }catch(err){
             console.error(err);
             next(err);
         }
     }
+
     else if(req.body.Method == "remain_table_cnt"){
         try{
-            const table =await Order.findAll({
+            var table =await Order.findAll({
                 include:{
                     model:Store,
                     attributes:[
-                    ]//아무것도 포함시키지 않으면 스토어의 값이 나오지 않고
-                    //아래에서 내가 조인시킨 스토어 값을 활용가능함
+                    ]//아무것도 포함시키지 않으면 스토어의 값이 나오지 않고 아래에서 내가 조인시킨 스토어 값을 활용가능함
                 },
                 attributes:[
                     "Store_code",//그룹화 시키기 위해 필요함
                     [Sequelize.literal('Table_cnt-count(distinct Table_num)'),"count"],
-                    //가게의 테이블 수에서 주문한 테이블을 중복하지않게 하여 그 갯수를 빼면
-                    //잔여 테이블 수가 나옴
+                    //가게의 테이블 수에서 주문한 테이블을 중복하지않게 하여 그 갯수를 빼면 잔여 테이블 수가 나옴
                 ],
-                wehre:{Nick:req.body.Nick},
+                where:{
+                    Nick:req.body.Nick,
+                    table_num:{[Op.gt]:0}
+                },
                 group:"Store_code",
                 //조인시켜서 계산을 했기 때문에 그룹화 시켜야 함
             })
-            res.json(table);
         }catch(err){
             console.error(err);
             next(err);
+        }
+
+        // 위의 쿼리문의 결과가 아무것도 없을 때 가게의 정보를 읽어와서 해당 테이블 갯수를 반환함 전체 테이블 수가 반환되는 것
+        if(table == ""){
+            try{
+                const tableCnt = await Store.findOne({
+                    attributes:[
+                        "Store_code",
+                        "Table_cnt",
+                    ],
+                    where:{
+                        Nick:req.body.Nick,
+                    }
+                })
+                res.json(tableCnt);
+            }catch(err){
+                console.error(err);
+                next(err);
+            }
+        }else{//비어있지 않다면 잔여 테이블수 쿼리를 실행한 결과를 반환함
+            res.json(table);
         }
     }
     
@@ -193,7 +216,6 @@ router.delete('/',async(req,res,next)=>{
             next(err);
           }
     };
-    
 });
 
 //db를 개편함

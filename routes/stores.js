@@ -44,19 +44,35 @@ router.post('/',async(req,res,next)=>{
   }
   else if(req.body.Method == "all"){
     try{
-      const store = await Store.findAll({
-        attributes:[
-          "Store_code",
-          "Nick",
-          "Category",
-          "Latitude",
-          "Longitude"
-        ],
-        where:{
-          Status:1,
-          Category:req.body.Category,
-        }
-      })
+      if (req.body.Category == "모든 가게") {
+        const store = await Store.findAll({
+          attributes:[
+            "Store_code",
+            "Nick",
+            "Category",
+            "Latitude",
+            "Longitude"
+          ],
+          where:{
+            Status:1,
+          }
+        })
+      }
+      else {
+        const store = await Store.findAll({
+          attributes:[
+            "Store_code",
+            "Nick",
+            "Category",
+            "Latitude",
+            "Longitude"
+          ],
+          where:{
+            Status:1,
+            Category:req.body.Category,
+          }
+        })
+      }
       res.json(store);
     }catch(err){
       console.error(err);

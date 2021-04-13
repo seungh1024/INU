@@ -125,6 +125,7 @@ router.post('/',async(req,res,next)=>{
                     //required:false,
                     //subQuery:false,
                     attributes:[
+                        "Table_cnt"
                     ],//어떤 컬럼도 넣지 않으면 스토어의 값은 불러오지 않고 조인하여 활용만 할 수 있음
                     //include,exclude 옵션을 사용할 수도 있지만 컬럼이 많아서 사용안함
                 },
@@ -137,7 +138,10 @@ router.post('/',async(req,res,next)=>{
                 ],
                 
                 // where:Sequelize.where[Sequelize.literal(`(Store.Nick = '${nick}')`)],
-                where:{Nick:req.body.Nick},
+                where:{
+                    Nick:req.body.Nick, 
+                    table_num:{[Op.gt]:0}
+                },
                 //group:"Store_code",
             })
                

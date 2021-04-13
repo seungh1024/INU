@@ -57,6 +57,7 @@ router.post('/',async(req,res,next)=>{
             Status:1,
           }
         })
+        res.json(store);
       }
       else {
         const store = await Store.findAll({
@@ -72,8 +73,9 @@ router.post('/',async(req,res,next)=>{
             Category:req.body.Category,
           }
         })
+        res.json(store);
       }
-      res.json(store);
+      
     }catch(err){
       console.error(err);
       next(err);

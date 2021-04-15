@@ -42,6 +42,7 @@ router.post('/',async(req,res,next)=>{
       next(err);
     }
   }
+
   else if(req.body.Method == "all"){
     try{
       if (req.body.Category == "모든 가게") {
@@ -76,6 +77,21 @@ router.post('/',async(req,res,next)=>{
         res.json(store);
       }
       
+    }catch(err){
+      console.error(err);
+      next(err);
+    }
+  }
+  
+  else if(req.body.Method == "get_nick"){
+    try{
+      const store = await Store.findOne({
+        attributes:[
+          "Nick",
+        ],
+        where:{Store_code:req.body.Store_code},
+      })
+      res.json(store);
     }catch(err){
       console.error(err);
       next(err);

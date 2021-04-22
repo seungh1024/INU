@@ -98,6 +98,9 @@ const router = express.Router();
 //해당하는 값들마다 서버에서 따로 처리함
 router.post('/',async(req,res,next)=>{
     console.log(req.body);
+    //현재시간이 시스템 시간고 ㅏ달라서 9시간을 더해줌
+    var realTime = new Date(new Date().setHours(new Date().getHours()+9));
+    
     //새로운 주문을 등록해줌
     if(req.body.Method == "Insert"){
         try{
@@ -109,6 +112,7 @@ router.post('/',async(req,res,next)=>{
                 Cook:req.body.Cook,
                 Pay:req.body.Pay,
                 Nick:req.body.Nick,
+                Time:realTime,
             });
             console.log(orders);
             res.json(orders);

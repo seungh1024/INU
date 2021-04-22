@@ -41,7 +41,7 @@ module.exports = class Order extends Sequelize.Model{
             Time:{//주문시각을 저장함
                 type:Sequelize.DATE,
                 allowNull:true,
-                defaultValue: Sequelize.NOW,
+                defaultValue:Sequelize.NOW,
                 primaryKey:true,
             },
             Nick:{
@@ -66,6 +66,7 @@ module.exports = class Order extends Sequelize.Model{
         },{
             sequelize,
             timestamps:false,
+            timezone:"+09:00",
             underscored:false,
             modelName:'Order',
             tableName:'orders',

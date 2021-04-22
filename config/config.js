@@ -6,20 +6,23 @@ module.exports ={
     "password": process.env.SEQUELIZE_PASSWORD,
     "database": "project",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    
   },
   "test": {
     "username": "root",
     "password": process.env.SEQUELIZE_PASSWORD,
     "database": "project_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone":"+09:00"
   },
   "production": {
     "username": "root",
     "password": null,
     "database": process.env.SEQUELIZE_PASSWORD,
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone":"+09:00"
   }
 }

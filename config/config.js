@@ -2,12 +2,19 @@ require('dotenv').config();
 
 module.exports ={
   "development": {
-    "username": "root",
+    "username": "nodejs",
     "password": process.env.SEQUELIZE_PASSWORD,
     "database": "project",
     "host": "127.0.0.1",
     "dialect": "mysql",
+<<<<<<< HEAD
     
+=======
+    "dialectOptions":{
+      useUTC:false,
+    },
+    "timezone":"+09:00"
+>>>>>>> sub
   },
   "test": {
     "username": "root",

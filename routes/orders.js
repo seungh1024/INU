@@ -264,7 +264,7 @@ router.post('/',async(req,res,next)=>{
             })
             var total = JSON.stringify(store) + "&" + JSON.stringify(table) + "&" + JSON.stringify(order);
             console.log(total);
-            res.json(total);
+            res.send(total);
         }catch(err){
             console.error(err);
             next(err);

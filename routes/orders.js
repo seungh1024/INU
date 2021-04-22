@@ -230,7 +230,7 @@ router.post('/',async(req,res,next)=>{
     
     else if(req.body.Method == "bill"){
         try{
-            var store =await Order.findAll({
+            var store =await Order.findOne({
                 attributes:[
                     [Sequelize.literal('distinct(Store_code)'),"Store_code"],
                 ],
@@ -238,13 +238,19 @@ router.post('/',async(req,res,next)=>{
                     Nick:req.body.Nick,
                 },
             })
-            var table =await Order.findAll({
+            var table =await Order.findOne({
                 attributes:[
                     [Sequelize.literal('distinct(Table_num)'),"Table_num"],
                 ],
                 where:{
                     Nick:req.body.Nick,
                 },
+            })
+            var store_name = await Store.findOne({
+                attributes:[
+                    "Nick",
+                ],
+                where:{Store_code:store.Store_code},
             })
             var order =await Order.findAll({
                 include:{
@@ -259,12 +265,29 @@ router.post('/',async(req,res,next)=>{
                     "Cnt",
                 ],
                 where:{
-                    Nick:req.body.Nick,
+                    Store_code:store.Store_code,
+                    Table_num:table.Table_num,
                 },
             })
-            var total = JSON.stringify(store) + "&" + JSON.stringify(table) + "&" + JSON.stringify(order);
+
+            var total = store_name.Nick + "&" + store.Store_code + "&" + table.Table_num + "&";
+
+            var cnt = 0;
+            if (order.length != 0) {
+                total = total + "[";
+
+                while (cnt < order.length) {
+                    if (order[cnt].Menu_name == order[cnt].Menu.Menu_name) {
+                        total = total + JSON.stringify(order[cnt]) + ",";
+                    }
+                    cnt = cnt + 1;
+                }
+
+                total = total.substring(0, total.length-1) + "]";
+            }
+
             console.log(total);
-            res.json(total);
+            res.send(total);
         }catch(err){
             console.error(err);
             next(err);
@@ -288,10 +311,77 @@ router.post('/',async(req,res,next)=>{
             next(err);
         }
     }
+    
+    else if(req.body.Method == "Remaining order"){
+        try{
+            var order =await Order.findAll({
+                attributes:[
+                    "Menu_name",
+                    "Cnt",
+                    "Table_num",
+                    "Time",
+                ],
+                where:{
+                    Store_code:req.body.Store_code,
+                    Cook:0,
+                },
+                order: [['Time', 'ASC']]
+            })
+            console.log(order);
+            res.json(order);
+        }catch(err){
+            console.error(err);
+            next(err);
+        }
+    }
+    
+    else if(req.body.Method == "By Table"){
+        try{
+            var order =await Order.findAll({
+                attributes:[
+                    "Menu_name",
+                    "Cnt",
+                ],
+                where:{
+                    Store_code:req.body.Store_code,
+                    Table_num:req.body.Table_num,
+                },
+                order: [['Time', 'ASC']]
+            })
+            console.log(order);
+            res.json(order);
+        }catch(err){
+            console.error(err);
+            next(err);
+        }
+    }
+    
+    else if(req.body.Method == "All Table"){
+        try{
+            var order =await Order.findAll({
+                attributes:[
+                    "Menu_name",
+                    "Cnt",
+                    "Table_num",
+                ],
+                where:{
+                    Store_code:req.body.Store_code,
+                    Table_num:{[Op.gt]:0}
+                },
+                order: [['Table_num', 'ASC']]
+            })
+            console.log(order);
+            res.json(order);
+        }catch(err){
+            console.error(err);
+            next(err);
+        }
+    }
 })
 
 //delete도 url로 값을 받아오지 않고 바디에 받아오게 수정함
 router.delete('/',async(req,res,next)=>{
+    console.log(req.body);
     if(req.body.Method == "Delete"){
         try{
             const orders = await Order.destroy({
@@ -301,6 +391,7 @@ router.delete('/',async(req,res,next)=>{
                 Table_num:req.body.Table_num,
                 Time:req.body.Time}
             });
+            console.log(orders);
             res.json(orders);
           }catch(err){
             console.error(err);
@@ -313,6 +404,8 @@ router.delete('/',async(req,res,next)=>{
 //post요청으로 대부분 처리하도록 바꾸고 메소드를 바디에 넣어서 쏴줌
 //해당하는 값들마다 서버에서 따로 처리함
 router.patch('/',async(req,res,next)=>{
+    console.log(req.body);
+
     if(req.body.Method=="Cook_Patch"){
         var cnt = 0;
         try{
@@ -331,15 +424,14 @@ router.patch('/',async(req,res,next)=>{
             }else{
                 cnt = 1;
                 CookPatch(req.body.Store_code,req.body.Menu_name,req.body.Cnt,req.body.Table_num,req.body.Time,cnt);
-                DeleteOrder(req.body.Store_code,req.body.Table_num);
             }
-            
-            res.json("Cook_Patch_Ok -> "+cnt);
+            res.send("Done");
         }catch(err){
             console.error(err);
             next(err);
         }
     }
+
     if(req.body.Method == "Pay_Patch"){
         var cnt = 0;
         try{
@@ -352,14 +444,11 @@ router.patch('/',async(req,res,next)=>{
             if(order.Pay == 1){
                 cnt = 0;
                 PayPatch(req.body.Store_code,req.body.Table_num,cnt);
-                
             }else{
                 cnt = 1;
                 PayPatch(req.body.Store_code,req.body.Table_num,cnt);
-                    
             }
-            
-            res.json("Pay_Patch_Ok -> "+cnt);
+            res.send("Done");
         }catch(err){
             console.error(err);
             next(err);
@@ -370,11 +459,10 @@ router.patch('/',async(req,res,next)=>{
 
 //Cook 값을 1이나 0으로 바꿔주는 async 함수
 //함수에서 값을 읽어서 Cook값을 업데이트 해줌
-async function CookPatch(Store_code,Menu_name,Cnt,Table_num,Time,cnt){
-    console.log(Store_code);
+async function CookPatch(Store_code,Menu_name,Cnt,Table_num,Time,patch){
     try{
         var order = await Order.update({
-            Cook:cnt,
+            Cook:patch,
         },
         {
             where:{
@@ -395,10 +483,10 @@ async function CookPatch(Store_code,Menu_name,Cnt,Table_num,Time,cnt){
 
 //Pay 값을 1이나 0으로 바꿔주는 async 함수
 //함수에서 값을 읽어서 Pay값을 업데이트 해줌
-async function PayPatch(Store_code,Table_num,cnt){
+async function PayPatch(Store_code,Table_num,patch){
     try{
         var order = await Order.update({
-            Pay:cnt,
+            Pay:patch,
         },
         {
             where:{
@@ -427,7 +515,8 @@ async function DeleteOrder(Store_code,Table_num){
                 Store_code:Store_code,
                 Table_num:Table_num,
                 Cook:1,
-                Pay:1}
+                Pay:1
+            }
         })
     }catch(err){
         console.error(err);
@@ -438,20 +527,18 @@ async function DeleteOrder(Store_code,Table_num){
 
 //결제 시 결제 한 것을 analysis로 옮겨주는 함수, payall시에 사용
 async function updateAnalysis(Store_code,Table_num){
-    var cnt =0;
     try{
         var orders = await Order.findAll({
             include:{
                 model: Menu,
                 where:{Store_code:Store_code}
             },
-            
             where:{
                 Store_code:Store_code,
                 Table_num:Table_num,
                 cook:1,
-                pay:1}
-
+                pay:1
+            }
         })
         console.log(orders);
     }catch(err){
@@ -459,23 +546,24 @@ async function updateAnalysis(Store_code,Table_num){
         return err;
     }
     
-    while(cnt < orders.length){
-        
+    var cnt =0;
+    while (cnt < orders.length){
         try{
-            const analysis = await Analysis.create({
-                Store_code:Store_code,
-                Menu_name: orders[cnt].Menu_name,
-                Menu_price: orders[cnt].Menu.Menu_price,
-                Cnt:orders[cnt].Cnt,
-                Time:orders[cnt].Time,
-                Nick:orders[cnt].Nick,
-
-            })
+            if (orders[cnt].Menu_name == orders[cnt].Menu.Menu_name) {
+                const analysis = await Analysis.create({
+                    Store_code:Store_code,
+                    Menu_name: orders[cnt].Menu_name,
+                    Menu_price: orders[cnt].Menu.Menu_price,
+                    Cnt:orders[cnt].Cnt,
+                    Time:orders[cnt].Time,
+                    Nick:orders[cnt].Nick,
+                })
+            }
         }catch(err){
             console.error(err);
             return err;
         }
-        cnt = cnt +1;
+        cnt = cnt + 1;
     }
 }
 

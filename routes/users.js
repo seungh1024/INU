@@ -26,48 +26,32 @@ router.post('/',async(req,res,next)=>{
     }
   }
 
-  else if(req.body.Method=='ID Check') {
+  else if(req.body.Method=='Regist') {
     try{
-      const user = await User.findOne({
+      var id = await User.findOne({
         where:{
           ID:req.body.ID,
         }
       })
-      // res.status(200).json(user);
-    }catch(err){
-      console.error(err);
-      next(err);
-    }
-    if (user == "") { res.send("True"); }
-    else { res.send("False"); }
-  }
-
-  else if(req.body.Method=='Nick Check') {
-    try{
-      const user = await User.findOne({
-        where:{
-          Nick:req.body.Nick,
+      if (id != null) { res.send("ID 중복"); }
+      else {
+        var nick = await User.findOne({
+          where:{
+            Nick:req.body.Nick,
+          }
+        })
+        if (nick != null) { res.send("Nickname 중복"); }
+        else {
+          const user = await User.create({
+            ID : req.body.ID,
+            PW : req.body.PW,
+            Who : req.body.Who,
+            Nick : req.body.Nick,
+          });
+          console.log(user);
+          res.send("Done");
         }
-      })
-      // res.status(200).json(user);
-    }catch(err){
-      console.error(err);
-      next(err);
-    }
-    if (user == "") { res.send("True"); }
-    else { res.send("False"); }
-  }
-
-  else if(req.body.Method=='Regist') {
-    try{
-      const user = await User.create({
-        ID : req.body.ID,
-        PW : req.body.PW,
-        Who : req.body.Who,
-        Nick : req.body.Nick,
-      });
-      console.log(user);
-      res.json(user);
+      }
     }catch(err){
       console.error(err);
       next(err);

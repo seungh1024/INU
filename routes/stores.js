@@ -8,12 +8,7 @@ const router = express.Router();
 router.route('/')// stores/로 get방식일 때
  .get(async (req, res, next) => {
     try {
-      const stores = await Store.findAll({
-        // include:{
-        //   model:User
-        // },
-        // //where:{store_code:1},
-      });
+      const stores = await Store.findAll({});
       res.json(stores);
     } catch (err) {
       console.error(err);

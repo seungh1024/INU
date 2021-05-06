@@ -127,8 +127,6 @@ router.post('/',async(req,res,next)=>{
             var table = await Order.findAll({
                 include:{
                     model:Store,
-                    //required:false,
-                    //subQuery:false,
                     attributes:[
                         "Table_cnt"
                     ],
@@ -141,12 +139,9 @@ router.post('/',async(req,res,next)=>{
                 
                 attributes:[
                     [Sequelize.literal('distinct(Table_num)'),"Table_num"],
-                    //"id"
-                    //"Table_num",
                     "Store_code",
                 ],
                 
-                // where:Sequelize.where[Sequelize.literal(`(Store.Nick = '${nick}')`)],
                 where:{
                     table_num:{[Op.gt]:0}
                 },

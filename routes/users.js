@@ -1,6 +1,5 @@
 const express = require('express');
 const User = require('../models/user');
-//const Comment = require('../models/comment');
 
 const router = express.Router();
 //GET /users, POST /users 주소로 요청이 들어올 때의 라우터
@@ -58,20 +57,6 @@ router.post('/',async(req,res,next)=>{
     }
   }
 })
-
-
-// router.delete('/:id/delete',async(req,res,next)=>{
-//   try{
-//     const users = await User.destroy({
-//       where:{id:req.params.id}
-//     });
-//     res.json(users);
-//   }catch(err){
-//     console.error(err);
-//     next(err);
-//   }
-// });
-
 
 
 module.exports = router;

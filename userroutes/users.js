@@ -52,15 +52,6 @@ router.get('/:id', async (req, res, next) => {
         where:{ id: req.params.id },
       
     });
-    //findAll메서드에 옵션이 추가됨
-    //include 옵션에서 model속성에는 User모델을, where속성에는 :id로 받은 아이디 값을 넣음
-    //include model:User를 했으니 댓글을 가져오면서 User의 정보도 들고오는 것
-    //:id는 라우트 매개변수(6.3절에 있음)
-    //req.params.id로 값을 가져올 수 있음
-    //req.params는 get request의 URL에서 :(콜론)뒤에 오는 파라미터를 가져올 때(파싱) 사용
-    //단 실제 URL에서 콜론이 입력되지는 않음.
-    //만약 GET/users/1/comments라면 사용자 아이디가 1인 댓글을 불러옴
-    console.log(users);
     res.json(users);
     
   } catch (err) {

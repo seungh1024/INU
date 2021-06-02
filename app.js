@@ -7,7 +7,6 @@ dotenv.config();
 const {sequelize}=require('./models');
 //./models 는 ./models/index.js와 같음 폴더내의 index.js파일은 require시 생략가능
 //index.js 에 보면 db를 연동할 수 있게 모듈로 만들어 놓음
-const indexRouter=require('./routes');
 const usersRouter = require('./routes/users');
 const storesRouter = require('./routes/stores');
 const menuRouter = require('./routes/menus');
@@ -42,7 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
-app.use('/',indexRouter);
 app.use('/user',usersRouter);
 app.use('/store',storesRouter);
 app.use('/menu',menuRouter);
@@ -51,7 +49,6 @@ app.use('/analysis',analysisRouter);
 app.use('/table',tablesRouter);
 app.use('/reserve',reserveRouter);
 
-//app.use('/comments',commentsRouter);
 
 app.use((req,res,next)=>{
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

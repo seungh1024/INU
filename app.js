@@ -12,7 +12,6 @@ const storesRouter = require('./routes/stores');
 const menuRouter = require('./routes/menus');
 const orderRouter = require('./routes/orders');
 const analysisRouter = require('./routes/analysis');
-const tablesRouter = require('./routes/tables');
 const reserveRouter = require('./routes/reserve');
 
 //const commentsRouter = require('./routes/comments');
@@ -46,7 +45,6 @@ app.use('/store',storesRouter);
 app.use('/menu',menuRouter);
 app.use('/order',orderRouter);
 app.use('/analysis',analysisRouter);
-app.use('/table',tablesRouter);
 app.use('/reserve',reserveRouter);
 
 

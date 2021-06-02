@@ -5,6 +5,8 @@ const router = express.Router();
 //GET /users, POST /users 주소로 요청이 들어올 때의 라우터
 //요청 방식을 바꾸기로함
 //post 방식을 이용하고 안의 데이터를 구분하여 받기로 해서 수정함
+
+//로그인
 router.post('/',async(req,res,next)=>{
   console.log(req.body);
 
@@ -25,6 +27,7 @@ router.post('/',async(req,res,next)=>{
     }
   }
 
+  //회원가입
   else if(req.body.Method=='Regist') {
     try{
       var id = await User.findOne({

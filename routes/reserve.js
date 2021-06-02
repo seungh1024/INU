@@ -3,6 +3,7 @@ const Reserve =require('../models/reserve');
 
 const router = express.Router();
 
+//예약 시스템 구현
 router.post('/',async(req,res,next)=>{
     if(req.body.Method == "Add"){
         try{

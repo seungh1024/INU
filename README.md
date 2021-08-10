@@ -24,3 +24,6 @@
 2. 사용자에게 매장 정보 제공
 3. 주문관련 요청 처리
 4. 매장에 통계 데이터 제공
+
+## 졸업작품 제출 및 기능 설명
+* 아이디어 붐:<http://www.ideaboom.net/page/project_detail.php?seq=2114>

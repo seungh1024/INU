@@ -12,7 +12,8 @@
 
 #### 동작순서
 * 이용자 앱(2~5 반복)
-스크린샷 2021-09-01 오후 12.37.58![image](https://user-images.githubusercontent.com/77014020/131607872-3d808d42-7ff9-421e-a6c5-fdea7ae77d79.png)
+    <img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "200" hight = "400">
+    ![initial](https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png)
     1. 로그인 
     2. 탐색 위치 설정
     3. 카테고리별 주변 가게 확인 및 선택

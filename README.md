@@ -26,10 +26,8 @@
 
 * 매장 앱(2~4반복)
 
- <img src="https://user-images.githubusercontent.com/77014020/131609896-4f0f86b5-c598-4090-964c-2856c5e8bcf6.jpeg" width = "400" hight = "800">
-    <img src="https://user-images.githubusercontent.com/77014020/131609819-87c0a897-7d24-4888-808e-e85f87625c3c.png" width = "400" hight = "800">
-    <img src="https://user-images.githubusercontent.com/77014020/131609913-60921133-3b98-4ea1-88e5-de214465b1e1.png" width = "400" hight = "800">
-    <img src="https://user-images.githubusercontent.com/77014020/131609918-9268acf5-b63b-451a-8586-2cb50265a6d1.png" width = "400" hight = "800">
+ <img src="https://user-images.githubusercontent.com/77014020/131609896-4f0f86b5-c598-4090-964c-2856c5e8bcf6.jpeg" width = "400" hight = "800"><img src="https://user-images.githubusercontent.com/77014020/131609819-87c0a897-7d24-4888-808e-e85f87625c3c.png" width = "400" hight = "800">
+    <img src="https://user-images.githubusercontent.com/77014020/131609913-60921133-3b98-4ea1-88e5-de214465b1e1.png" width = "400" hight = "800"><img src="https://user-images.githubusercontent.com/77014020/131609918-9268acf5-b63b-451a-8586-2cb50265a6d1.png" width = "400" hight = "800">
     <img src="https://user-images.githubusercontent.com/77014020/131609922-b3cf3969-3557-4cce-948c-5bdd28af6981.png" width = "400" hight = "800">
     
 

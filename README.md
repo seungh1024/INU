@@ -15,7 +15,7 @@
 
  <img src="https://user-images.githubusercontent.com/77014020/131608621-3fb70543-2678-43aa-815d-163b0d0047a4.png" width = "600" hight = "1200"><img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "600" hight = "1200">
     <img src="https://user-images.githubusercontent.com/77014020/131608779-c3abf3f0-54d1-4f8f-b07f-fb6ab8e4c7a2.png" width = "600" hight = "1200">
-    <img src="https://user-images.githubusercontent.com/77014020/131609289-43fd2d19-a218-4ab6-8b1b-0cd0c67e71e2.png" width = "600" hight = "1200"><img width="100" alt="스크린샷 2021-09-01 오후 12 57 16" src="https://user-images.githubusercontent.com/77014020/131609383-ace1fe79-0609-4d6a-bfa0-9c4ecb6f97c7.png">
+    <img src="https://user-images.githubusercontent.com/77014020/131609289-43fd2d19-a218-4ab6-8b1b-0cd0c67e71e2.png" width = "600" hight = "1200"><img width="150" alt="스크린샷 2021-09-01 오후 12 57 16" src="https://user-images.githubusercontent.com/77014020/131609383-ace1fe79-0609-4d6a-bfa0-9c4ecb6f97c7.png">
 
 
     1. 로그인 

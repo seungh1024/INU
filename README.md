@@ -12,7 +12,7 @@
 
 #### 동작순서
 * 이용자 앱(2~5 반복)
-    <img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "400" hight = "800">
+    <img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "600" hight = "1200">
     ![initial](https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png)
     1. 로그인 
     2. 탐색 위치 설정

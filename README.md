@@ -12,8 +12,12 @@
 
 #### 동작순서
 * 이용자 앱(2~5 반복)
-    <img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "600" hight = "1200">
-    ![initial](https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png)
+    <img src="https://user-images.githubusercontent.com/77014020/131608621-3fb70543-2678-43aa-815d-163b0d0047a4.png" width = "600" hight = "1200"><img src="https://user-images.githubusercontent.com/77014020/131608062-d149cf26-9d79-4992-b92a-472d671b41ab.png" width = "600" hight = "1200">
+    <img src="https://user-images.githubusercontent.com/77014020/131608779-c3abf3f0-54d1-4f8f-b07f-fb6ab8e4c7a2.png" width = "600" hight = "1200">
+    <img src="https://user-images.githubusercontent.com/77014020/131609001-13a96b9f-a397-4ebc-9f32-7ba8222c96ba.png" width = "600" hight = "1200"><img src="https://user-images.githubusercontent.com/77014020/131609084-ecde8254-f27c-4d90-995f-48c80303189e.png" width = "600" hight = "1200">
+
+
+
     1. 로그인 
     2. 탐색 위치 설정
     3. 카테고리별 주변 가게 확인 및 선택

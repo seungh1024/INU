@@ -1,4 +1,4 @@
-## 인천대학교 캡스톤디자인 졸업작품: POSS(POS For Offline Services)
+## 인천대학교 캡스톤디자인 졸업작품: POS(POS for Offline Services)
 >오프라인 상점에서 사용하기 위한 온라인 주문 시스템
 
 ##### 기획 의도
